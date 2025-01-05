@@ -1,0 +1,31 @@
+ ********** Robot program starting **********  
+       NT: Listening on NT3 port 1735, NT4 port 5810  
+       NT: Got a NT4 connection from 172.22.11.1 port 63361  
+       NT: CONNECTED NT4 client 'shuffleboard@1' (from 172.22.11.1:63361)  
+        ERROR    1    Unhandled exception instantiating robot java.util.Objects java.lang.NullPointerException: Parameter requirement in method addRequirements was null when it should not have been!  Check the stacktrace to find the responsible line of code - usually, it is the first line of user-written code indicated in the stacktrace.  Make sure all objects passed to the method in question were properly initialized - note that this may not be obvious if it is being called under dynamically-changing conditions!  Please do not seek additional technical assistance without doing this first!    java.base/java.util.Objects.requireNonNull(Unknown Source)    
+       Error at java.base/java.util.Objects.requireNonNull(Unknown Source): Unhandled exception instantiating robot java.util.Objects java.lang.NullPointerException: Parameter requirement in method addRequirements was null when it should not have been!  Check the stacktrace to find the responsible line of code - usually, it is the first line of user-written code indicated in the stacktrace.  Make sure all objects passed to the method in question were properly initialized - note that this may not be obvious if it is being called under dynamically-changing conditions!  Please do not seek additional technical assistance without doing this first!  
+       	at java.base/java.util.Objects.requireNonNull(Unknown Source)  
+        ERROR    1    The robot program quit unexpectedly. This is usually due to a code error.
+  The above stacktrace can help determine where the error occurred.
+  See https://wpilib.org/stacktrace for more information.
+    edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:383)    
+        ERROR    1    Could not instantiate robot java.util.Objects!    edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:389)    
+       	at edu.wpi.first.util.ErrorMessages.requireNonNullParam(ErrorMessages.java:27)  
+       	at edu.wpi.first.wpilibj2.command.Command.addRequirements(Command.java:95)  
+       	at edu.wpi.first.wpilibj2.command.FunctionalCommand.<init>(FunctionalCommand.java:47)  
+       	at edu.wpi.first.wpilibj2.command.RunCommand.<init>(RunCommand.java:25)  
+       	at edu.wpi.first.wpilibj2.command.Commands.run(Commands.java:63)  
+       	at frc.robot.commands.DriveCommand.joystickDrive(DriveCommand.java:34)  
+       	at frc.robot.RobotContainer.configureButtonBindings(RobotContainer.java:135)  
+       	at frc.robot.RobotContainer.<init>(RobotContainer.java:77)  
+       	at frc.robot.RobotContainer.<clinit>(RobotContainer.java:51)  
+       	at frc.robot.Robot.<init>(Robot.java:40)  
+       	at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:370)  
+       	at edu.wpi.first.wpilibj.RobotBase.startRobot(RobotBase.java:510)  
+       	at frc.robot.Main.main(Main.java:31)  
+         
+       Error at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:383): The robot program quit unexpectedly. This is usually due to a code error.  
+         The above stacktrace can help determine where the error occurred.  
+         See https://wpilib.org/stacktrace for more information.  
+         
+       Error at edu.wpi.first.wpilibj.RobotBase.runRobot(RobotBase.java:389): Could not instantiate robot java.util.Objects!  
