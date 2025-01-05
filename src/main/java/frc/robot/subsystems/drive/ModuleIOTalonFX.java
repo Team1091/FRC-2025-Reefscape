@@ -16,13 +16,19 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix6.hardware.core.CoreCANcoder;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkLowLevel;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.servohub.ServoHub.ResetMode;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 
 import static frc.robot.Constants.Swerve.*;
 
@@ -39,13 +45,15 @@ import static frc.robot.Constants.Swerve.*;
  * "/Drive/ModuleX/TurnAbsolutePositionRad"
  */
 public class ModuleIOTalonFX implements ModuleIO {
-  private final CANSparkMax driveSparkMax;
-  private final CANSparkMax turnSparkMax;
+  private final SparkMax driveSparkMax;
+  private final SparkMax turnSparkMax;
+  private final SparkMaxConfig driveConfig;
+  private final SparkMaxConfig turnConfig;
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder turnRelativeEncoder;
-  private final CANcoder cancoder;
+  private final CoreCANcoder cancoder;
 
-  private final StatusSignal<Double> turnAbsolutePosition;
+  private final StatusSignal<Angle> turnAbsolutePosition;
 
   // Gear ratios for SDS MK4i L2, adjust as necessary
   private final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
@@ -57,28 +65,28 @@ public class ModuleIOTalonFX implements ModuleIO {
   public ModuleIOTalonFX(int index) {
     switch (index) {
       case FRONT_LEFT:
-        driveSparkMax = new CANSparkMax(6, CANSparkLowLevel.MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(5, CANSparkLowLevel.MotorType.kBrushless);
-        cancoder = new CANcoder(1);
+        driveSparkMax = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
+        turnSparkMax = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
+        cancoder = new CoreCANcoder(1);
         absoluteEncoderOffset = Rotation2d.fromDegrees(260);
         driveSparkMax.setInverted(false);
         break;
       case FRONT_RIGHT:
-        driveSparkMax = new CANSparkMax(8, CANSparkLowLevel.MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(7, CANSparkLowLevel.MotorType.kBrushless);
-        cancoder = new CANcoder(2);
+        driveSparkMax = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
+        turnSparkMax = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
+        cancoder = new CoreCANcoder(2);
         absoluteEncoderOffset = Rotation2d.fromDegrees(45);
         break;
       case BACK_LEFT:
-        driveSparkMax = new CANSparkMax(1, CANSparkLowLevel.MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushless);
-        cancoder = new CANcoder(3);
+        driveSparkMax = new SparkMax(1, SparkLowLevel.MotorType.kBrushless);
+        turnSparkMax = new SparkMax(2, SparkLowLevel.MotorType.kBrushless);
+        cancoder = new CoreCANcoder(3);
         absoluteEncoderOffset = Rotation2d.fromDegrees(262.33);
         break;
       case BACK_RIGHT:
-        driveSparkMax = new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
-        turnSparkMax = new CANSparkMax(4, CANSparkLowLevel.MotorType.kBrushless);
-        cancoder = new CANcoder(4);
+        driveSparkMax = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);
+        turnSparkMax = new SparkMax(4, SparkLowLevel.MotorType.kBrushless);
+        cancoder = new CoreCANcoder(4);
         absoluteEncoderOffset = Rotation2d.fromDegrees(217.5);
         break;
       default:
@@ -91,8 +99,20 @@ public class ModuleIOTalonFX implements ModuleIO {
         50.0,
         turnAbsolutePosition);
 
-    driveSparkMax.restoreFactoryDefaults();
-    turnSparkMax.restoreFactoryDefaults();
+    driveConfig = new SparkMaxConfig();
+    turnConfig = new SparkMaxConfig();
+
+    turnConfig.inverted(isTurnMotorInverted);
+    driveConfig.smartCurrentLimit(40);
+    turnConfig.smartCurrentLimit(20);
+    driveConfig.voltageCompensation(12.0);
+    turnConfig.voltageCompensation(12.0);
+
+    driveConfig.encoder.uvwMeasurementPeriod(10);
+    driveConfig.encoder.uvwAverageDepth(2);
+
+    turnConfig.encoder.uvwMeasurementPeriod(10);
+    turnConfig.encoder.uvwAverageDepth(2);
 
     driveSparkMax.setCANTimeout(250);
     turnSparkMax.setCANTimeout(250);
@@ -100,26 +120,14 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveEncoder = driveSparkMax.getEncoder();
     turnRelativeEncoder = turnSparkMax.getEncoder();
 
-    turnSparkMax.setInverted(isTurnMotorInverted);
-    driveSparkMax.setSmartCurrentLimit(40);
-    turnSparkMax.setSmartCurrentLimit(20);
-    driveSparkMax.enableVoltageCompensation(12.0);
-    turnSparkMax.enableVoltageCompensation(12.0);
-
     driveEncoder.setPosition(0.0);
-    driveEncoder.setMeasurementPeriod(10);
-    driveEncoder.setAverageDepth(2);
-
     turnRelativeEncoder.setPosition(driveEncoder.getPosition() * 2.0 * Math.PI);
-    turnRelativeEncoder.setMeasurementPeriod(10);
-    turnRelativeEncoder.setAverageDepth(2);
-    // turnRelativeEncoder.setInverted(true);
+    //turnConfig.encoder.inverted(true);
 
     driveSparkMax.setCANTimeout(0);
     turnSparkMax.setCANTimeout(0);
 
-    driveSparkMax.burnFlash();
-    turnSparkMax.burnFlash();
+    driveSparkMax.configure(driveConfig, com.revrobotics.spark.SparkBase.ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -153,11 +161,11 @@ public class ModuleIOTalonFX implements ModuleIO {
 
   @Override
   public void setDriveBrakeMode(boolean enable) {
-    driveSparkMax.setIdleMode(enable ? CANSparkBase.IdleMode.kBrake : CANSparkBase.IdleMode.kCoast);
+    driveConfig.idleMode(enable ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
   }
 
   @Override
   public void setTurnBrakeMode(boolean enable) {
-    turnSparkMax.setIdleMode(enable ? CANSparkBase.IdleMode.kBrake : CANSparkBase.IdleMode.kCoast);
+    turnConfig.idleMode(enable ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
   }
 }

@@ -42,14 +42,6 @@ public final class Constants {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);
     }
-
-    public static final class Template {
-        public final static int pwmMotorChannel = 19;
-        public final static int canMotorChannel = 20;
-        public final static int encoderChannel1 = 1;
-        public final static int encoderChannel2 = 2;
-        public final static double motorSpeed = 1;
-    }
     
     public static final double linearDeadband = 0.1;
     public static final double rotationalDeadband = .1;
