@@ -14,6 +14,9 @@ import edu.wpi.first.math.util.Units;
 
 import java.util.Map;
 
+import com.pathplanner.lib.config.*;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 public final class Constants {
 
     public static class Swerve {
@@ -41,6 +44,15 @@ public final class Constants {
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);
+    }
+
+    public static final class PathPlanner {
+        public static final PPHolonomicDriveController controller = new PPHolonomicDriveController(
+                new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
+                new PIDConstants(3, 0, 0) // 1.3 Rotation constants 3
+                );
+        //public static final RobotConfig config = new RobotConfig(null, null, null, null);
+
     }
     
     public static final double linearDeadband = 0.1;

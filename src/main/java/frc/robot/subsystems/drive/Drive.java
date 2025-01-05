@@ -12,6 +12,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
 import static frc.robot.Constants.Swerve.*;
+import static frc.robot.Constants.PathPlanner.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class Drive extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -38,6 +42,16 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition();
         }
+
+        // AutoBuilder.configure(
+        //         this::getPose, // Robot pose supplier
+        //         this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        //         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        //         (speeds, feedforwards) -> runVelocity(speeds),
+        //         controller, // The robot configuration
+        //         this::isOnRed,
+        //         this // Reference to this subsystem to set requirements
+        // );
     }
 
     public void periodic() {
