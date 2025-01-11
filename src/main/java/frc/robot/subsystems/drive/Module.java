@@ -53,7 +53,6 @@ public class Module {
                     new PidConfig(0.05, 0.0, 0.0), // drive
                     new PidConfig(3, 0.0, 0.0)     // turn
             )
-
     };
 
 
