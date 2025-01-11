@@ -59,7 +59,8 @@ public class ModuleIOTalonFX implements ModuleIO {
   private final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   private final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
-  private  boolean isTurnMotorInverted = true;
+  private boolean isTurnMotorInverted = true;
+  private boolean isDriveMotorInverted = false;
   private final Rotation2d absoluteEncoderOffset;
 
   public ModuleIOTalonFX(int index) {
@@ -68,26 +69,25 @@ public class ModuleIOTalonFX implements ModuleIO {
         driveSparkMax = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         turnSparkMax = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         cancoder = new CoreCANcoder(2);
-        absoluteEncoderOffset = Rotation2d.fromDegrees(260);
-        driveSparkMax.setInverted(false);
+        absoluteEncoderOffset = Rotation2d.fromDegrees(0);
         break;
       case FRONT_RIGHT:
         driveSparkMax = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
         turnSparkMax = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
         cancoder = new CoreCANcoder(3);
-        absoluteEncoderOffset = Rotation2d.fromDegrees(45);
+        absoluteEncoderOffset = Rotation2d.fromDegrees(0);
         break;
       case BACK_LEFT:
         driveSparkMax = new SparkMax(1, SparkLowLevel.MotorType.kBrushless);
         turnSparkMax = new SparkMax(2, SparkLowLevel.MotorType.kBrushless);
         cancoder = new CoreCANcoder(4);
-        absoluteEncoderOffset = Rotation2d.fromDegrees(262.33);
+        absoluteEncoderOffset = Rotation2d.fromDegrees(0);
         break;
       case BACK_RIGHT:
         driveSparkMax = new SparkMax(3, SparkLowLevel.MotorType.kBrushless);
         turnSparkMax = new SparkMax(4, SparkLowLevel.MotorType.kBrushless);
         cancoder = new CoreCANcoder(1);
-        absoluteEncoderOffset = Rotation2d.fromDegrees(217.5);
+        absoluteEncoderOffset = Rotation2d.fromDegrees(0);
         break;
       default:
         throw new RuntimeException("Invalid module index");
@@ -102,6 +102,7 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveConfig = new SparkMaxConfig();
     turnConfig = new SparkMaxConfig();
 
+    driveConfig.inverted(isDriveMotorInverted);
     turnConfig.inverted(isTurnMotorInverted);
     driveConfig.smartCurrentLimit(40);
     turnConfig.smartCurrentLimit(20);
@@ -122,7 +123,6 @@ public class ModuleIOTalonFX implements ModuleIO {
 
     driveEncoder.setPosition(0.0);
     turnRelativeEncoder.setPosition(driveEncoder.getPosition() * 2.0 * Math.PI);
-    //turnConfig.encoder.inverted(true);
 
     driveSparkMax.setCANTimeout(0);
     turnSparkMax.setCANTimeout(0);
@@ -137,9 +137,9 @@ public class ModuleIOTalonFX implements ModuleIO {
     inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
     inputs.driveCurrentAmps = new double[]{driveSparkMax.getOutputCurrent()};
 
-    inputs.turnAbsolutePosition = new Rotation2d(driveEncoder.getPosition() * 2.0 * Math.PI).minus(absoluteEncoderOffset);
-    inputs.turnPosition = new Rotation2d(Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO).getRadians() % (Math.PI * 2.0));
-    //inputs.turnPosition = Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
+    //inputs.turnAbsolutePosition = new Rotation2d(driveEncoder.getPosition() * 2.0 * Math.PI).minus(absoluteEncoderOffset);
+    //inputs.turnPosition = new Rotation2d(Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO).getRadians() % (Math.PI * 2.0));
+    inputs.turnPosition = Rotation2d.fromRotations(turnRelativeEncoder.getPosition() / TURN_GEAR_RATIO);
     inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity()) / TURN_GEAR_RATIO;
     inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
     inputs.turnCurrentAmps = new double[]{turnSparkMax.getOutputCurrent()};
