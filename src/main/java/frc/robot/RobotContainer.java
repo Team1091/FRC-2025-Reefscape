@@ -116,7 +116,7 @@ public class RobotContainer {
     poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
     drive.straightenWheels();
     drive.resetGyro();
-    drive.setFieldState(false);
+    drive.setFieldState(true);
   }
 
   
@@ -133,7 +133,6 @@ public class RobotContainer {
     //Drive
         driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.setCurrentPose(new Pose2d(poseEstimationSubsystem.getCurrentPose().getTranslation(), new Rotation2d())), poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().whileTrue(Commands.runOnce(() -> drive.straightenWheels(), drive));
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
@@ -144,7 +143,7 @@ public class RobotContainer {
                         },
                         () -> { // y+ is to the left, y- is to the right
 //                            return -joystick.getX();
-                            return driver.getLeftX();
+                            return -driver.getLeftX();
                         },
                         () -> { // z+ is rotating counterclockwise
 //                            return -joystick.getTwist();
