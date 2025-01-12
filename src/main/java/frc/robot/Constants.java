@@ -1,6 +1,7 @@
 package frc.robot;
 
 import static frc.robot.Constants.Swerve.driveBaseRadius;
+import static frc.robot.Constants.Swerve.trackWidthX;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -10,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 
 import java.util.Map;
@@ -52,7 +54,7 @@ public final class Constants {
                 new PIDConstants(.5, 0, 0), // 2.0 Translation constants 3
                 new PIDConstants(3, 0, 0) // 1.3 Rotation constants 3
                 );
-        //public static final RobotConfig config = new RobotConfig(null, null, null, null);
+        public static final RobotConfig config = new RobotConfig(15, 1, new ModuleConfig(0.0508, 3, 1.2, DCMotor.getNEO(1).withReduction((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)), 120.0, 1), trackWidthX);
 
     }
     

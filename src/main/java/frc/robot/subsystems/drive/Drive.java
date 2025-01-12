@@ -15,6 +15,7 @@ import static frc.robot.Constants.Swerve.*;
 import static frc.robot.Constants.PathPlanner.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class Drive extends SubsystemBase {
@@ -42,16 +43,17 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition();
         }
-
-        // AutoBuilder.configure(
-        //         this::getPose, // Robot pose supplier
-        //         this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        //         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        //         (speeds, feedforwards) -> runVelocity(speeds),
-        //         controller, // The robot configuration
-        //         this::isOnRed,
-        //         this // Reference to this subsystem to set requirements
-        // );
+        
+        AutoBuilder.configure(
+                this::getPose, // Robot pose supplier
+                poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (speeds, feedforwards) -> runVelocity(speeds),
+                controller, //The path planner controller
+                config, // The robot configuration
+                this::isOnRed,
+                this // Reference to this subsystem to set requirements
+        );
     }
 
     public void periodic() {
@@ -196,6 +198,14 @@ public class Drive extends SubsystemBase {
 
     public void resetGyro() {
         gyroIO.resetGyro();
+    }
+
+    public boolean isOnRed(){
+        var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                      return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
     }
 
     public void setPoseEstimationSubsystem(PoseEstimationSubsystem poseEstimationSubsystem) {
