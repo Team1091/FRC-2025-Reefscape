@@ -7,7 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
@@ -43,17 +47,6 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition();
         }
-        
-        AutoBuilder.configure(
-                this::getPose, // Robot pose supplier
-                poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds, feedforwards) -> runVelocity(speeds),
-                controller, //The path planner controller
-                config, // The robot configuration
-                this::isOnRed,
-                this // Reference to this subsystem to set requirements
-        );
     }
 
     public void periodic() {
@@ -73,6 +66,20 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = modules[i].getPositionDelta();
         }
+    }
+
+    public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem){
+        this.poseEstimationSubsystem = poseEstimationSubsystem;
+        AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> runVelocity(speeds),
+            controller, //The path planner controller
+            config, // The robot configuration
+            this::isOnRed,
+            this // Reference to this subsystem to set requirements
+        );
     }
 
     /**
@@ -206,9 +213,5 @@ public class Drive extends SubsystemBase {
                       return alliance.get() == DriverStation.Alliance.Red;
                     }
                     return false;
-    }
-
-    public void setPoseEstimationSubsystem(PoseEstimationSubsystem poseEstimationSubsystem) {
-        this.poseEstimationSubsystem = poseEstimationSubsystem;
     }
 }

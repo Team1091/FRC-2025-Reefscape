@@ -29,18 +29,22 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 new Pose2d(),
                 Constants.PoseEstimation.stateStdDevs,
                 Constants.PoseEstimation.visionMeasurementStdDevs);
-
-//        Shuffleboard.getTab("Main").add("Field", "Field2d", field);
     }
 
     @Override
     public void periodic(){
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
+        LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
+
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        poseEstimator.addVisionMeasurement(
-                limelightMeasurement.pose,
-                limelightMeasurement.timestampSeconds);
+        try {
+            if (limelightMeasurement.tagCount > 0){
+                poseEstimator.addVisionMeasurement(
+                    limelightMeasurement.pose,
+                    limelightMeasurement.timestampSeconds);
+            }
+        } catch (Exception e){}
     }
 
     public Pose2d getCurrentPose() {
