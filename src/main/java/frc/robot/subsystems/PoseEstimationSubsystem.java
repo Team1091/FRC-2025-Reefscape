@@ -4,6 +4,9 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,7 +19,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     private final Supplier<Rotation2d> rotationSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
-    private Field2d field;
+    private Field2d field = new Field2d();    
 
     public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier){
         this.rotationSupplier = rotationSupplier;
@@ -29,6 +32,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 new Pose2d(),
                 Constants.PoseEstimation.stateStdDevs,
                 Constants.PoseEstimation.visionMeasurementStdDevs);
+        Shuffleboard.getTab("General").add("Field", field).withWidget("Field");
     }
 
     @Override
@@ -45,6 +49,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                     limelightMeasurement.timestampSeconds);
             }
         } catch (Exception e){}
+        field.setRobotPose(getCurrentPose());
     }
 
     public Pose2d getCurrentPose() {
