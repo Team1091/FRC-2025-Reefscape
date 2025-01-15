@@ -120,7 +120,7 @@ public class RobotContainer {
       )
     );
 
-    driver.a().whileTrue(generateDriveToPoseCommand(poseEstimationSubsystem, 13.524, 5.651, poseEstimationSubsystem.getCurrentPose().getRotation()));
+    driver.a().onTrue(generateDriveToPoseCommand(poseEstimationSubsystem, 13.524, 5.651, poseEstimationSubsystem.getCurrentPose().getRotation()));
   }
 
   public static Command generateDriveToPoseCommand(PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, Rotation2d finalRotation){

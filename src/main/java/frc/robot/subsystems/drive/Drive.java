@@ -28,7 +28,7 @@ public class Drive extends SubsystemBase {
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
 
     private boolean isFieldOriented = true;
-    private ChassisSpeeds speeds;
+    private ChassisSpeeds chassisSpeeds;
     private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
 
@@ -102,7 +102,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void runVelocity(ChassisSpeeds chassisSpeeds) {
-        speeds = chassisSpeeds;
+        this.chassisSpeeds = chassisSpeeds;
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
@@ -200,7 +200,7 @@ public class Drive extends SubsystemBase {
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return speeds;
+        return chassisSpeeds;
     }
 
     public void resetGyro() {
