@@ -12,6 +12,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
@@ -47,6 +48,7 @@ public class RobotContainer {
   private final PoseEstimationSubsystem poseEstimationSubsystem;
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController secondDriver = new CommandXboxController(1);
+  private final TroughSubsystem troughSubsystem = new TroughSubsystem();
 
   private static RobotContainer m_robotContainer = new RobotContainer();
 

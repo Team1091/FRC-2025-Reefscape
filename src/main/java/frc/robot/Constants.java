@@ -41,6 +41,10 @@ public final class Constants {
 
     }
 
+    public static final class Trough{
+        public static final int outputMotorChannel = 1;
+    }
+
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         //public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);
