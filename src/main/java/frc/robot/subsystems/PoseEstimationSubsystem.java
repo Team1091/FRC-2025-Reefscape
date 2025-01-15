@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -32,24 +33,22 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 new Pose2d(),
                 Constants.PoseEstimation.stateStdDevs,
                 Constants.PoseEstimation.visionMeasurementStdDevs);
-        Shuffleboard.getTab("General").add("Field", field).withWidget("Field");
     }
 
     @Override
     public void periodic(){
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
-
+        // SmartDashboard.putNumber("Mod 1 state", modulePositionSupplier.get()[0].distanceMeters);
         LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        try {
-            if (limelightMeasurement.tagCount > 0){
-                poseEstimator.addVisionMeasurement(
-                    limelightMeasurement.pose,
-                    limelightMeasurement.timestampSeconds);
-            }
-        } catch (Exception e){}
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        if (limelightMeasurement.tagCount > 0){
+            poseEstimator.addVisionMeasurement(
+                limelightMeasurement.pose,
+                limelightMeasurement.timestampSeconds);
+        }
         field.setRobotPose(getCurrentPose());
+        SmartDashboard.putData("Field", field);
     }
 
     public Pose2d getCurrentPose() {

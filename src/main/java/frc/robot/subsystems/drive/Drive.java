@@ -29,7 +29,7 @@ public class Drive extends SubsystemBase {
 
     private boolean isFieldOriented = true;
     private ChassisSpeeds speeds;
-    private SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
+    private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
 
     public Drive(
@@ -45,7 +45,7 @@ public class Drive extends SubsystemBase {
         modules[BACK_RIGHT] = new Module(brModuleIO, 3, "BR");
 
         for (int i = 0; i < 4; i++) {
-            wheelDeltas[i] = new SwerveModulePosition();
+            modulePositions[i] = new SwerveModulePosition();
         }
     }
 
@@ -64,7 +64,7 @@ public class Drive extends SubsystemBase {
 
         // Update odometry
         for (int i = 0; i < 4; i++) {
-            wheelDeltas[i] = modules[i].getPositionDelta();
+            modulePositions[i] = modules[i].getPosition();
         }
     }
 
@@ -188,7 +188,7 @@ public class Drive extends SubsystemBase {
     }
 
     public SwerveModulePosition[] getModulePositions() {
-        return wheelDeltas;
+        return modulePositions;
     }
 
     public Rotation2d getGyroRotation() {
