@@ -135,7 +135,7 @@ public class RobotContainer {
     //Drive
         driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.setCurrentPose(new Pose2d(poseEstimationSubsystem.getCurrentPose().getTranslation(), new Rotation2d())), poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-
+        driver.rightTrigger().onTrue( new TroughCommand(troughSubsystem));
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
                         drive,

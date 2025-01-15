@@ -3,9 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.TroughSubsystem;
 
-public class TroughExplosionCommand extends Command{
+public class TroughCommand extends Command{
     private final TroughSubsystem troughSubsystem;
-    public TroughExplosionCommand(TroughSubsystem troughSubsystem){
+    public TroughCommand(TroughSubsystem troughSubsystem){
         this.troughSubsystem = troughSubsystem;
         addRequirements(troughSubsystem);
 
