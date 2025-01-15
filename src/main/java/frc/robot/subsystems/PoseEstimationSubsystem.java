@@ -38,7 +38,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
-        // SmartDashboard.putNumber("Mod 1 state", modulePositionSupplier.get()[0].distanceMeters);
+
         LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
 
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
@@ -49,6 +49,8 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         }
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);
+        SmartDashboard.putNumber("X pos", getCurrentPose().getX());
+        SmartDashboard.putNumber("Y pos", getCurrentPose().getY());
     }
 
     public Pose2d getCurrentPose() {

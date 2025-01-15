@@ -44,7 +44,7 @@ public class DriveToPoseCommand extends Command {
             new Pose2d(finalX, finalY, heading)
         );
 
-        PathConstraints constraints = new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, 1.0, 1.0); // The constraints for this path.
         // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
 
         // Create the path using the waypoints created above
