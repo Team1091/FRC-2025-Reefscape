@@ -32,10 +32,6 @@ public class PivotSubsystem extends SubsystemBase{
         this.pivotEncoder = new Encoder(Constants.Pivot.pivotEncoder1, Constants.Pivot.pivotEncoder2, Constants.Pivot.pivotEncoder3);
         this.limitSwitch = new DigitalInput(Constants.Pivot.limitSwitch);
     }
-
-    public void setPivotPosition(PivotPosition pivotPosition) {
-        this.pivotPosition = pivotPosition;
-    }
     public void setOverwrite(boolean overwrite){this.overwrite = overwrite;}
 
     @Override
@@ -59,5 +55,15 @@ public class PivotSubsystem extends SubsystemBase{
             pivotMotor.set(0);
         }
 
+    }
+
+    public void setPivotPosition(int pivotPosition2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPivotPosition'");
+    }
+
+    public void setPivotPosition(PivotPosition in) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPivotPosition'");
     }
 }
