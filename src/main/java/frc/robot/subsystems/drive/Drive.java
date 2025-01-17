@@ -69,6 +69,13 @@ public class Drive extends SubsystemBase {
     }
 
     public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem){
+        RobotConfig localConfig;
+        try{
+            localConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e){
+            localConfig = config;
+            e.printStackTrace();
+        }
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         AutoBuilder.configure(
             this::getPose, // Robot pose supplier
@@ -76,7 +83,7 @@ public class Drive extends SubsystemBase {
             this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             (speeds, feedforwards) -> runVelocity(speeds),
             controller, //The path planner controller
-            config, // The robot configuration
+            localConfig, // The robot configuration
             this::isOnRed,
             this // Reference to this subsystem to set requirements
         );
