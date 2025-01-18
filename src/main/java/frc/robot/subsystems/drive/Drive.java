@@ -94,14 +94,21 @@ public class Drive extends SubsystemBase {
      */
     public void runVelocity(Translation2d linearVelocity, double omega){
         Rotation2d rotation;
+
+        int invert = 1;
+
+        if (isOnRed()){
+            invert = -1;
+        }
+
         if (isFieldOriented) {
             rotation = getPose().getRotation();
         } else {
             rotation = new Rotation2d(0);
         }
         ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                linearVelocity.getX() * maxLinearSpeed,
-                linearVelocity.getY() * maxLinearSpeed,
+                linearVelocity.getX() * maxLinearSpeed * invert,
+                linearVelocity.getY() * maxLinearSpeed * invert,
                 omega * maxAngularSpeed,
                 rotation
         );
