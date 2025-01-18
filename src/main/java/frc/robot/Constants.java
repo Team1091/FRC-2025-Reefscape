@@ -63,6 +63,14 @@ public final class Constants {
         public static final int inEncoderPosition = 0;
         public static final int scorePosition = 0;
     }
+    public static final class Elevator{
+        public static final int elevatormotor= 0;
+        public static final int elevatorEncoder1 = 1;
+        public static final int elevatorEncoder2 = 1;
+        public static final int elevatorEncoder3 = 1;
+        public static final int elevatorlimitSwitch = 1;
+        public static final double elevatorSpeed = 0.5;
+    }
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);

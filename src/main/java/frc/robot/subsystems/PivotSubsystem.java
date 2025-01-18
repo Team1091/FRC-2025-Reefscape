@@ -1,69 +1,59 @@
+
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class PivotSubsystem extends SubsystemBase{
-     public enum PivotPosition {
-        in, out, score;
-    }
-    private boolean overwrite;
+/*
+    subsystems contain methods used to interact with the robot hardware
+    each hardware component can only be accessed in one subsystem
+    methods in subsystems are run by commands
+ */
 
+public class PivotSubsystem extends SubsystemBase {
+
+    //motors are defined by the type of their motor controller (ask electrical)
     private final SparkMax pivotMotor;
     private final Encoder pivotEncoder;
     private final DigitalInput limitSwitch;
-    private static ShuffleboardTab tab = Shuffleboard.getTab("General");
-    private static GenericEntry encoderPosition = tab.add("Encoder Position", 0.0).getEntry();
-    private static GenericEntry limitSwitchOn = tab.add("Limit Switch", false).getEntry();
-
-
-    private PivotPosition pivotPosition = PivotPosition.in;
+    private double speed;
 
     public PivotSubsystem() {
         this.pivotMotor = new SparkMax(Constants.Pivot.pivotMotor, MotorType.kBrushed);
         this.pivotEncoder = new Encoder(Constants.Pivot.pivotEncoder1, Constants.Pivot.pivotEncoder2, Constants.Pivot.pivotEncoder3);
         this.limitSwitch = new DigitalInput(Constants.Pivot.limitSwitch);
     }
-    public void setOverwrite(boolean overwrite){this.overwrite = overwrite;}
 
+    public void resetEncoder() {
+                pivotEncoder.reset();
+    }
+
+    public int getEncoderPosition() {
+        return pivotEncoder.get();//value is in encoder counts (does not return common units like degrees)
+    }
+    public boolean getLimitSwitch(){
+        return limitSwitch.get();
+    }
+    public void setMotorSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    //the periodic method always runs over and over when robot is enabled
     @Override
     public void periodic() {
-        encoderPosition.setDouble(pivotEncoder.get());
-        if (limitSwitch.get() == false) {
-            pivotEncoder.reset();
+        //sets voltage from -1 to 1 not actual rpm
+        pivotMotor.set(speed);
+        if(getLimitSwitch()){
+            resetEncoder();
         }
-        limitSwitchOn.setBoolean(!limitSwitch.get());
-
-        var position = pivotEncoder.get();
-        if (overwrite) {
-            pivotMotor.set(-Constants.Pivot.pivotSpeed);
-        } else if (pivotPosition == PivotPosition.out && position > Constants.Pivot.outEncoderPosition) {
-            pivotMotor.set(Constants.Pivot.pivotSpeed);
-        } else if (pivotPosition == PivotPosition.in && position < Constants.Pivot.inEncoderPosition && limitSwitch.get() == true) {
-            pivotMotor.set(-Constants.Pivot.pivotSpeed);
-        } else if (pivotPosition == PivotPosition.score && position > Constants.Pivot.scorePosition) {
-            pivotMotor.set(Constants.Pivot.pivotSpeed);
-        } else {
-            pivotMotor.set(0);
-        }
-
-    }
-
-    public void setPivotPosition(int pivotPosition2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPivotPosition'");
-    }
-
-    public void setPivotPosition(PivotPosition in) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setPivotPosition'");
     }
 }
+
+
