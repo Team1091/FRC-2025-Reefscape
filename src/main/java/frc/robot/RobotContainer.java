@@ -12,6 +12,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
@@ -53,7 +54,7 @@ public class RobotContainer {
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController secondDriver = new CommandXboxController(1);
-    
+  private final TroughSubsystem troughSubsystem = new TroughSubsystem();
   // A chooser for autonomous commands
   //SendableChooser<AutoChoice> autoChooser = new SendableChooser<>();
   SendableChooser<Command> autoChooser;
@@ -109,7 +110,7 @@ public class RobotContainer {
     //Drive
     driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.setCurrentPose(new Pose2d(poseEstimationSubsystem.getCurrentPose().getTranslation(), new Rotation2d())), poseEstimationSubsystem));
     driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-
+    driver.rightTrigger().whileTrue( new TroughCommand(troughSubsystem));
     drive.setDefaultCommand(
       DriveCommand.joystickDrive(
         drive,

@@ -43,6 +43,26 @@ public final class Constants {
 
     }
 
+    public static final class Trough{
+        public static final int outputMotorChannel = 1;
+        public static final double holdSpeed = 0.5;
+        public static final double shootSpeed = -0.5;
+    }
+    public static final class Intake{
+        public static final int intakeMotorChannel = 1;
+        public static final double intakeSpeed = 0.5;
+    }
+    public static final class Pivot{
+        public static final int pivotMotor = 1;
+        public static final int pivotEncoder1 = 1;
+        public static final int pivotEncoder2 = 1;
+        public static final int pivotEncoder3 = 1;
+        public static final int limitSwitch = 1;
+        public static final double pivotSpeed = 0.5;
+        public static final int outEncoderPosition = 0;
+        public static final int inEncoderPosition = 0;
+        public static final int scorePosition = 0;
+    }
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);
