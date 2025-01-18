@@ -1,14 +1,17 @@
 package frc.robot.commands;
 
-import java.util.concurrent.locks.Condition;
-
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.PivotPosition;
 import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.PivotSubsystem.PivotPosition;
 
 public class PivotCommand extends Command {
     private final PivotSubsystem pivotSubsystem;
     private PivotPosition pivotPosition;
+
+    private double endPosition = 0;
+    private int motorDirection = 1;
+    //because Ben says it is cool
 
     public PivotCommand(PivotSubsystem pivotSubsystem, PivotPosition pivotPosition) {
         this.pivotSubsystem = pivotSubsystem;
@@ -18,29 +21,37 @@ public class PivotCommand extends Command {
 
     @Override
     public void initialize(){
-        pivotSubsystem.setPivotPosition(PivotSubsystem.PivotPosition.in);
+        if (pivotPosition == PivotPosition.out){
+            endPosition= Constants.Pivot.outEncoderPosition;
+        }else if(pivotPosition == PivotPosition.score){
+            endPosition= Constants.Pivot.scorePosition;
+        } else{
+            endPosition= Constants.Pivot.inEncoderPosition;;
+        }
+
+        if (pivotSubsystem.getEncoderPosition()> endPosition){
+            motorDirection = -1;
+        }
     }
 
     @Override
     public void execute() {
-        if (pivotPosition == PivotPosition.out){
-            pivotSubsystem.setPivotPosition(PivotSubsystem.PivotPosition.out);
-        } else if (pivotPosition == PivotPosition.in) {
-            pivotSubsystem.setPivotPosition(PivotSubsystem.PivotPosition.in);
-        }else if(pivotPosition == PivotPosition.score){
-            pivotSubsystem.setPivotPosition(PivotSubsystem.PivotPosition.score);
-        } else{
-            pivotSubsystem.setPivotPosition(0);
-        }
+        pivotSubsystem.setMotorSpeed(Constants.Pivot.pivotSpeed * motorDirection);
 
     }
     @Override
     public void end(boolean interrupted){
-        pivotSubsystem.setPivotPosition(PivotSubsystem.PivotPosition.in);
+        pivotSubsystem.setMotorSpeed(0);
     }
 
     @Override
     public boolean isFinished(){
+        if (pivotSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
+            return true;
+        }
+        if (pivotSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
+            return true;
+        }
         return false;
     }
 }
