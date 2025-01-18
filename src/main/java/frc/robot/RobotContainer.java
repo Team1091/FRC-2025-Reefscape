@@ -11,7 +11,6 @@
 // ROBOTBUILDER TYPE: RobotContainer.
 
 package frc.robot;
-
 import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -27,6 +26,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -54,9 +54,9 @@ public class RobotContainer {
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController secondDriver = new CommandXboxController(1);
-  private final TroughSubsystem troughSubsystem = new TroughSubsystem();
+  //private final TroughSubsystem troughSubsystem = new TroughSubsystem();
+
   // A chooser for autonomous commands
-  //SendableChooser<AutoChoice> autoChooser = new SendableChooser<>();
   SendableChooser<Command> autoChooser;
 
   /**
@@ -80,13 +80,6 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    //Add in named commands for pathplanner
-    //NamedCommands.registerCommand("Template", new TemplateCommand(templateSubsystem, Constants.Template.motorSpeed));
-
-    //Add autos to shuffleboard
-    // autoChooser.addOption("Auto 1", AutoChoice.Auto1);
-    // autoChooser.addOption("Auto 2", AutoChoice.Auto2);
-    // Shuffleboard.getTab("General").add("Auto Choice", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
@@ -108,9 +101,9 @@ public class RobotContainer {
   
   private void configureButtonBindings() {
     //Drive
-    driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.setCurrentPose(new Pose2d(poseEstimationSubsystem.getCurrentPose().getTranslation(), new Rotation2d())), poseEstimationSubsystem));
+    driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.resetDriveRotation(), poseEstimationSubsystem));
     driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-    driver.rightTrigger().whileTrue( new TroughCommand(troughSubsystem));
+    //driver.rightTrigger().whileTrue( new TroughCommand(troughSubsystem));
     drive.setDefaultCommand(
       DriveCommand.joystickDrive(
         drive,
@@ -129,38 +122,18 @@ public class RobotContainer {
     driver.a().onTrue(generateDriveToPoseCommand(poseEstimationSubsystem, 13.524, 5.651, poseEstimationSubsystem.getCurrentPose().getRotation()));
   }
 
-  public static Command generateDriveToPoseCommand(PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, Rotation2d finalRotation){
+  public Command generateDriveToPoseCommand(PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, Rotation2d finalRotation){
     Pose2d targetPose = new Pose2d(finalX, finalY, finalRotation);
 
     PathConstraints constraints = new PathConstraints(.5, .5, Units.degreesToRadians(180), Units.degreesToRadians(360));
 
     return AutoBuilder.pathfindToPose(targetPose, constraints, 0);
-    // Pose2d initialPose = poseEstimationSubsystem.getCurrentPose();
-    // Rotation2d heading = initialPose.getTranslation().minus(new Translation2d(finalX, finalY)).getAngle();
+  }
 
-    // // Create a list of waypoints from poses. Each pose represents one waypoint.
-    // // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-    // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-    //     //new Pose2d(initialPose.getX(), initialPose.getY(), heading),
-    //     new Pose2d(0, 0, new Rotation2d()),
-    //     new Pose2d(finalX, finalY, heading)
-    // );
-
-    // PathConstraints constraints = new PathConstraints(1, 1, 1, 1); // The constraints for this path.
-    // // PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
-
-    // // Create the path using the waypoints created above
-    // PathPlannerPath path = new PathPlannerPath(
-    //         waypoints,
-    //         constraints,
-    //         null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
-    //         new GoalEndState(0.0, finalRotation) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    // );
-
-    // // Prevent the path from being flipped if the coordinates are already correct
-    // path.preventFlipping = true;
-
-    // return AutoBuilder.followPath(path);
+  public Command scoreCommand(){
+    return new SequentialCommandGroup(
+      
+    );
   }
 
   public Command getAutonomousCommand() {
