@@ -70,6 +70,20 @@ public final class Constants {
         public static final int elevatorEncoder3 = 1;
         public static final int elevatorlimitSwitch = 1;
         public static final double elevatorSpeed = 0.5;
+        public static final int l2EncoderPosition = 0;
+        public static final int l3EncoderPosition = 0;
+        public static final int l4Position = 0;
+    }
+    public static final class Dealgae{
+        public static final int dealgaemotor= 0;
+        public static final int dealgaeEncoder1 = 1;
+        public static final int dealgaeEncoder2 = 1;
+        public static final int dealgaeEncoder3 = 1;
+        public static final int dealgaelimitSwitch = 1;
+        public static final double dealgaeSpeed = 0.5;
+        public static final int outEncoderPosition = 0;
+        public static final int inEncoderPosition = 0;
+        
     }
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);

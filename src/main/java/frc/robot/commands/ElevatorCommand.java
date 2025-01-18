@@ -20,11 +20,11 @@ public class ElevatorCommand extends Command{
     @Override
     public void initialize(){
         if (elevatorPosition == ElevatorPosition.l2){
-            endPosition= Constants.Pivot.outEncoderPosition;
+            endPosition= Constants.Elevator.l2EncoderPosition;
         }else if(elevatorPosition == ElevatorPosition.l3){
-            endPosition= Constants.Pivot.scorePosition;
+            endPosition= Constants.Elevator.l3EncoderPosition;
         }else if(elevatorPosition == ElevatorPosition.l4){
-            endPosition= Constants.Pivot.scorePosition;
+            endPosition= Constants.Elevator.l4Position;
         } else{
             endPosition= Constants.Pivot.outEncoderPosition;
         }
