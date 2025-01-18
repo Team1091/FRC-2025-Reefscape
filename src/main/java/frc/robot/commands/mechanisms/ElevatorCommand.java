@@ -1,8 +1,8 @@
-package frc.robot.commands;
-import frc.robot.subsystems.ElevatorSubsystem;
+package frc.robot.commands.mechanisms;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.ElevatorPosition;
+import frc.robot.enums.ElevatorPosition;
+import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 public class ElevatorCommand extends Command{
     private final ElevatorSubsystem elevatorSubsystem;
     private ElevatorPosition elevatorPosition;
@@ -20,13 +20,13 @@ public class ElevatorCommand extends Command{
     @Override
     public void initialize(){
         if (elevatorPosition == ElevatorPosition.l2){
-            endPosition= Constants.Elevator.l2EncoderPosition;
+            endPosition = Constants.Elevator.l2EncoderPosition;
         }else if(elevatorPosition == ElevatorPosition.l3){
-            endPosition= Constants.Elevator.l3EncoderPosition;
+            endPosition = Constants.Elevator.l3EncoderPosition;
         }else if(elevatorPosition == ElevatorPosition.l4){
-            endPosition= Constants.Elevator.l4Position;
+            endPosition = Constants.Elevator.l4Position;
         } else{
-            endPosition= Constants.Pivot.outEncoderPosition;
+            endPosition = 0;
         }
 
         if (elevatorSubsystem.getEncoderPosition()> endPosition){

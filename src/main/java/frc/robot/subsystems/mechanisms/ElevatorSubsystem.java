@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.mechanisms;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -22,7 +22,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void resetEncoder() {
-                elevatorEncoder.setPosition(0);
+        elevatorEncoder.setPosition(0);
     }
 
     public double getEncoderPosition() {

@@ -1,21 +1,24 @@
-package frc.robot.commands;
+package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSubsystemBack;
+import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
 
 
 public class IntakeCommandBack extends Command{
     private final IntakeSubsystemBack intakeSubsystemBack;
-    public IntakeCommandBack(IntakeSubsystemBack intakeSubsystemBack){
-        this.intakeSubsystemBack = intakeSubsystemBack;
-        addRequirements(intakeSubsystemBack);
+    
+    private double speed;
 
+    public IntakeCommandBack(IntakeSubsystemBack intakeSubsystemBack, double speed){
+        this.intakeSubsystemBack = intakeSubsystemBack;
+        this.speed = speed;
+        addRequirements(intakeSubsystemBack);
     }
 
     @Override
     public void execute(){
-        intakeSubsystemBack.setSpeed(Constants.Intake.intakeSpeed);
+        intakeSubsystemBack.setSpeed(speed);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.PivotPosition;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.robot.enums.PivotPosition;
+import frc.robot.subsystems.mechanisms.PivotSubsystem;
 
 public class PivotCommand extends Command {
     private final PivotSubsystem pivotSubsystem;
@@ -22,14 +22,14 @@ public class PivotCommand extends Command {
     @Override
     public void initialize(){
         if (pivotPosition == PivotPosition.out){
-            endPosition= Constants.Pivot.outEncoderPosition;
+            endPosition = Constants.Pivot.outEncoderPosition;
         }else if(pivotPosition == PivotPosition.score){
-            endPosition= Constants.Pivot.scorePosition;
+            endPosition = Constants.Pivot.scorePosition;
         } else{
-            endPosition= Constants.Pivot.inEncoderPosition;;
+            endPosition = 0;
         }
 
-        if (pivotSubsystem.getEncoderPosition()> endPosition){
+        if (pivotSubsystem.getEncoderPosition() > endPosition){
             motorDirection = -1;
         }
     }

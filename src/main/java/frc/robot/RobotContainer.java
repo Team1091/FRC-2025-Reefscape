@@ -13,10 +13,19 @@
 package frc.robot;
 import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
+import frc.robot.commands.mechanisms.ElevatorCommand;
+import frc.robot.commands.mechanisms.TroughCommand;
+import frc.robot.enums.ElevatorPosition;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.mechanisms.DealgaeSubsystem;
+import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
+import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
+import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
+import frc.robot.subsystems.mechanisms.PivotSubsystem;
+import frc.robot.subsystems.mechanisms.TroughSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -50,6 +59,12 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drive drive;
   private final PoseEstimationSubsystem poseEstimationSubsystem;
+  private final DealgaeSubsystem dealgaeSubsystem;
+  private final ElevatorSubsystem elevatorSubsystem;
+  private final IntakeSubsystemFront intakeSubsystemFront;
+  private final IntakeSubsystemBack intakeSubsystemBack;
+  private final PivotSubsystem pivotSubsystem;
+  private final TroughSubsystem troughSubsystem;
 
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
@@ -77,6 +92,13 @@ public class RobotContainer {
     );
 
     drive.configureAutoBuilder(poseEstimationSubsystem);
+
+    dealgaeSubsystem = new DealgaeSubsystem();
+    elevatorSubsystem = new ElevatorSubsystem();
+    intakeSubsystemFront = new IntakeSubsystemFront();
+    intakeSubsystemBack = new IntakeSubsystemBack();
+    pivotSubsystem = new PivotSubsystem();
+    troughSubsystem = new TroughSubsystem();
 
     configureButtonBindings();
 
@@ -130,9 +152,11 @@ public class RobotContainer {
     return AutoBuilder.pathfindToPose(targetPose, constraints, 0);
   }
 
-  public Command scoreCommand(){
+  public Command scoreCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
-      
+      new ElevatorCommand(elevatorSubsystem, level),
+      new TroughCommand(troughSubsystem, Constants.Trough.shootSpeed),
+      new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down)
     );
   }
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.mechanisms;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -21,7 +21,7 @@ public class DealgaeSubsystem extends SubsystemBase{
     }
 
     public void resetEncoder() {
-                dealgaeEncoder.setPosition(0);
+        dealgaeEncoder.setPosition(0);
     }
 
     public double getEncoderPosition() {
