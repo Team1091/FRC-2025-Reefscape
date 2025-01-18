@@ -4,7 +4,11 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -16,7 +20,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     private final Supplier<Rotation2d> rotationSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
-    private Field2d field;
+    private Field2d field = new Field2d();    
 
     public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier){
         this.rotationSupplier = rotationSupplier;
@@ -29,18 +33,24 @@ public class PoseEstimationSubsystem extends SubsystemBase {
                 new Pose2d(),
                 Constants.PoseEstimation.stateStdDevs,
                 Constants.PoseEstimation.visionMeasurementStdDevs);
-
-//        Shuffleboard.getTab("Main").add("Field", "Field2d", field);
     }
 
     @Override
     public void periodic(){
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
-        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        poseEstimator.addVisionMeasurement(
+        LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
+
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        if (limelightMeasurement.tagCount > 0){
+            poseEstimator.addVisionMeasurement(
                 limelightMeasurement.pose,
                 limelightMeasurement.timestampSeconds);
+        }
+        field.setRobotPose(getCurrentPose());
+        SmartDashboard.putData("Field", field);
+        SmartDashboard.putNumber("X pos", getCurrentPose().getX());
+        SmartDashboard.putNumber("Y pos", getCurrentPose().getY());
     }
 
     public Pose2d getCurrentPose() {

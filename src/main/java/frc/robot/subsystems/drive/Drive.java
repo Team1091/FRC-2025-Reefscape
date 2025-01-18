@@ -7,7 +7,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
@@ -15,6 +19,7 @@ import static frc.robot.Constants.Swerve.*;
 import static frc.robot.Constants.PathPlanner.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class Drive extends SubsystemBase {
@@ -23,8 +28,8 @@ public class Drive extends SubsystemBase {
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
 
     private boolean isFieldOriented = true;
-    private ChassisSpeeds speeds;
-    private SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
+    private ChassisSpeeds chassisSpeeds;
+    private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
 
     public Drive(
@@ -40,18 +45,8 @@ public class Drive extends SubsystemBase {
         modules[BACK_RIGHT] = new Module(brModuleIO, 3, "BR");
 
         for (int i = 0; i < 4; i++) {
-            wheelDeltas[i] = new SwerveModulePosition();
+            modulePositions[i] = new SwerveModulePosition();
         }
-
-        // AutoBuilder.configure(
-        //         this::getPose, // Robot pose supplier
-        //         this::setPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        //         this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        //         (speeds, feedforwards) -> runVelocity(speeds),
-        //         controller, // The robot configuration
-        //         this::isOnRed,
-        //         this // Reference to this subsystem to set requirements
-        // );
     }
 
     public void periodic() {
@@ -69,8 +64,29 @@ public class Drive extends SubsystemBase {
 
         // Update odometry
         for (int i = 0; i < 4; i++) {
-            wheelDeltas[i] = modules[i].getPositionDelta();
+            modulePositions[i] = modules[i].getPosition();
         }
+    }
+
+    public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem){
+        RobotConfig localConfig;
+        try{
+            localConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e){
+            localConfig = config;
+            e.printStackTrace();
+        }
+        this.poseEstimationSubsystem = poseEstimationSubsystem;
+        AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> runVelocity(speeds),
+            controller, //The path planner controller
+            localConfig, // The robot configuration
+            this::isOnRed,
+            this // Reference to this subsystem to set requirements
+        );
     }
 
     /**
@@ -93,7 +109,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void runVelocity(ChassisSpeeds chassisSpeeds) {
-        speeds = chassisSpeeds;
+        this.chassisSpeeds = chassisSpeeds;
         // Calculate module setpoints
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
         SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
@@ -179,7 +195,7 @@ public class Drive extends SubsystemBase {
     }
 
     public SwerveModulePosition[] getModulePositions() {
-        return wheelDeltas;
+        return modulePositions;
     }
 
     public Rotation2d getGyroRotation() {
@@ -191,14 +207,18 @@ public class Drive extends SubsystemBase {
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return speeds;
+        return chassisSpeeds;
     }
 
     public void resetGyro() {
         gyroIO.resetGyro();
     }
 
-    public void setPoseEstimationSubsystem(PoseEstimationSubsystem poseEstimationSubsystem) {
-        this.poseEstimationSubsystem = poseEstimationSubsystem;
+    public boolean isOnRed(){
+        var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                      return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
     }
 }
