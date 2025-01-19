@@ -44,19 +44,18 @@ public final class Constants {
     }
 
     public static final class Trough{
-        public static final int outputMotorChannel = 1;
+        public static final int outputMotorChannel = 11;
         public static final double holdSpeed = 0.5;
         public static final double shootSpeed = -0.5;
     }
     public static final class Intake{
-        public static final int intakeMotorChannel = 1;
-        public static final double intakeSpeed = 0.5;
+        public static final int intakeMotorChannelFront = 12;
+        public static final double intakeSpeedFront = 0.5;
+        public static final int intakeMotorChannelBack = 13;
+        public static final double intakeSpeedBack = 0.5;
     }
     public static final class Pivot{
-        public static final int pivotMotor = 1;
-        public static final int pivotEncoder1 = 1;
-        public static final int pivotEncoder2 = 1;
-        public static final int pivotEncoder3 = 1;
+        public static final int pivotMotor = 14;
         public static final int limitSwitch = 1;
         public static final double pivotSpeed = 0.5;
         public static final int outEncoderPosition = 0;
@@ -64,22 +63,16 @@ public final class Constants {
         public static final int scorePosition = 0;
     }
     public static final class Elevator{
-        public static final int elevatormotor= 0;
-        public static final int elevatorEncoder1 = 1;
-        public static final int elevatorEncoder2 = 1;
-        public static final int elevatorEncoder3 = 1;
-        public static final int elevatorlimitSwitch = 1;
+        public static final int elevatormotor= 15;
+        public static final int elevatorlimitSwitch = 2;
         public static final double elevatorSpeed = 0.5;
         public static final int l2EncoderPosition = 0;
         public static final int l3EncoderPosition = 0;
         public static final int l4Position = 0;
     }
     public static final class Dealgae{
-        public static final int dealgaemotor= 0;
-        public static final int dealgaeEncoder1 = 1;
-        public static final int dealgaeEncoder2 = 1;
-        public static final int dealgaeEncoder3 = 1;
-        public static final int dealgaelimitSwitch = 1;
+        public static final int dealgaemotor= 16;
+        public static final int dealgaelimitSwitch = 3;
         public static final double dealgaeSpeed = 0.5;
         public static final int outEncoderPosition = 0;
         public static final int inEncoderPosition = 0;

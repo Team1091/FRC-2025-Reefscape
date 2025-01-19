@@ -8,7 +8,7 @@ import frc.robot.Constants;
 
 public class IntakeSubsystemFront extends SubsystemBase {
     private double speed;
-    SparkMax intakemotorFront = new SparkMax(Constants.Intake.intakeMotorChannel, MotorType.kBrushless);
+    SparkMax intakemotorFront = new SparkMax(Constants.Intake.intakeMotorChannelFront, MotorType.kBrushless);
    
     public void setSpeed(double speed){
         this.speed = speed;
