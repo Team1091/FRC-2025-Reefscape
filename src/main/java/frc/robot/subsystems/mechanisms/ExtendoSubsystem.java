@@ -8,16 +8,17 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class DealgaeSubsystem extends SubsystemBase{
+public class ExtendoSubsystem extends SubsystemBase{
     private final SparkMax dealgaeMotor;
     private final RelativeEncoder dealgaeEncoder;
     private final DigitalInput dealgaelimitSwitch;
+    
     private double speed;
 
-    public DealgaeSubsystem() {
-        this.dealgaeMotor = new SparkMax(Constants.Dealgae.dealgaemotor, MotorType.kBrushed);
+    public ExtendoSubsystem() {
+        this.dealgaeMotor = new SparkMax(Constants.Extendo.motorChannel, MotorType.kBrushed);
         this.dealgaeEncoder = dealgaeMotor.getEncoder();
-        this.dealgaelimitSwitch = new DigitalInput(Constants.Dealgae.dealgaelimitSwitch);
+        this.dealgaelimitSwitch = new DigitalInput(Constants.Extendo.limitSwitchChannel);
     }
 
     public void resetEncoder() {

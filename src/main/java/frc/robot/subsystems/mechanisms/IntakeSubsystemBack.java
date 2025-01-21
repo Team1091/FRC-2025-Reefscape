@@ -9,9 +9,10 @@ import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants;
 
 public class IntakeSubsystemBack extends SubsystemBase{
-    private double speed;
-    SparkMax intakemotorBack = new SparkMax(Constants.Intake.intakeMotorChannel, MotorType.kBrushless);
+    private final SparkMax intakemotorBack = new SparkMax(Constants.Intake.motorChannel, MotorType.kBrushless);
    
+    private double speed;
+
     public void setSpeed(double speed){
         this.speed = speed;
     }

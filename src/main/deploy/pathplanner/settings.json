@@ -28,5 +28,7 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Chute\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.381,\"y\":-0.051},\"end\":{\"x\":-0.381,\"y\":-0.051},\"strokeWidth\":0.02}}"
+  ]
 }

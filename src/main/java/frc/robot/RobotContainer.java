@@ -14,18 +14,21 @@ package frc.robot;
 import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
 import frc.robot.commands.mechanisms.ElevatorCommand;
+import frc.robot.commands.mechanisms.ExtendoCommand;
+import frc.robot.commands.mechanisms.LimitSwitchWaitCommand;
 import frc.robot.commands.mechanisms.TroughCommand;
 import frc.robot.enums.ElevatorPosition;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.mechanisms.DealgaeSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
+import frc.robot.subsystems.mechanisms.ExtendoSubsystem;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
 import frc.robot.subsystems.mechanisms.PivotSubsystem;
 import frc.robot.subsystems.mechanisms.TroughSubsystem;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,6 +38,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -59,7 +64,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drive drive;
   private final PoseEstimationSubsystem poseEstimationSubsystem;
-  private final DealgaeSubsystem dealgaeSubsystem;
+  private final ExtendoSubsystem extendoSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
   private final IntakeSubsystemFront intakeSubsystemFront;
   private final IntakeSubsystemBack intakeSubsystemBack;
@@ -69,7 +74,6 @@ public class RobotContainer {
   // Joysticks
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController secondDriver = new CommandXboxController(1);
-  //private final TroughSubsystem troughSubsystem = new TroughSubsystem();
 
   // A chooser for autonomous commands
   SendableChooser<Command> autoChooser;
@@ -93,12 +97,18 @@ public class RobotContainer {
 
     drive.configureAutoBuilder(poseEstimationSubsystem);
 
-    dealgaeSubsystem = new DealgaeSubsystem();
+    extendoSubsystem = new ExtendoSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
     intakeSubsystemFront = new IntakeSubsystemFront();
     intakeSubsystemBack = new IntakeSubsystemBack();
     pivotSubsystem = new PivotSubsystem();
     troughSubsystem = new TroughSubsystem();
+
+    NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
+    NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
+    NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
+    NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(troughSubsystem, true));
+
 
     configureButtonBindings();
 
@@ -125,7 +135,8 @@ public class RobotContainer {
     //Drive
     driver.povUp().onTrue(Commands.runOnce(() -> poseEstimationSubsystem.resetDriveRotation(), poseEstimationSubsystem));
     driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-    //driver.rightTrigger().whileTrue( new TroughCommand(troughSubsystem));
+    driver.a().onTrue(generateDriveToPoseCommand(poseEstimationSubsystem, 13.524, 5.651, poseEstimationSubsystem.getCurrentPose().getRotation()));
+
     drive.setDefaultCommand(
       DriveCommand.joystickDrive(
         drive,
@@ -141,7 +152,8 @@ public class RobotContainer {
       )
     );
 
-    driver.a().onTrue(generateDriveToPoseCommand(poseEstimationSubsystem, 13.524, 5.651, poseEstimationSubsystem.getCurrentPose().getRotation()));
+    //Mechanisms
+
   }
 
   public Command generateDriveToPoseCommand(PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, Rotation2d finalRotation){
@@ -155,8 +167,26 @@ public class RobotContainer {
   public Command scoreCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
       new ElevatorCommand(elevatorSubsystem, level),
-      new TroughCommand(troughSubsystem, Constants.Trough.shootSpeed),
+      new ParallelRaceGroup(
+        new TroughCommand(troughSubsystem, Constants.Trough.shootSpeed),
+        new LimitSwitchWaitCommand(troughSubsystem, false)
+      ),
       new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down)
+    );
+  }
+
+  public Command dealgaeCommand(ElevatorPosition level){
+    return new SequentialCommandGroup(
+      new ElevatorCommand(elevatorSubsystem, level),
+      new ExtendoCommand(extendoSubsystem, true),
+      new ParallelRaceGroup(
+        new TroughCommand(troughSubsystem, Constants.Trough.shootSpeed),
+        new TimerCommand(1000)
+      ),
+      new ParallelCommandGroup(
+        new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down),
+        new ExtendoCommand(extendoSubsystem, false)
+      )
     );
   }
 

@@ -5,8 +5,8 @@ import frc.robot.enums.ElevatorPosition;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 public class ElevatorCommand extends Command{
     private final ElevatorSubsystem elevatorSubsystem;
-    private ElevatorPosition elevatorPosition;
 
+    private ElevatorPosition elevatorPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
     //because Ben says it is cool
@@ -19,14 +19,27 @@ public class ElevatorCommand extends Command{
 
     @Override
     public void initialize(){
-        if (elevatorPosition == ElevatorPosition.l2){
-            endPosition = Constants.Elevator.l2EncoderPosition;
-        }else if(elevatorPosition == ElevatorPosition.l3){
-            endPosition = Constants.Elevator.l3EncoderPosition;
-        }else if(elevatorPosition == ElevatorPosition.l4){
-            endPosition = Constants.Elevator.l4Position;
-        } else{
-            endPosition = 0;
+        switch (elevatorPosition) {
+            case l2:
+                endPosition = Constants.Elevator.l2Position;
+                break;
+            
+            case l3:
+                endPosition = Constants.Elevator.l3Position;
+                break;
+
+            case l4:
+                endPosition = Constants.Elevator.l4Position;
+                break;
+            case algae1:
+                endPosition = Constants.Elevator.algae1Position;
+                break;
+
+            case algae2:
+                endPosition = Constants.Elevator.algae2Position;
+            default:
+                endPosition = 0;
+                break;
         }
 
         if (elevatorSubsystem.getEncoderPosition()> endPosition){
@@ -36,7 +49,7 @@ public class ElevatorCommand extends Command{
 
     @Override
     public void execute() {
-        elevatorSubsystem.setMotorSpeed(Constants.Elevator.elevatorSpeed * motorDirection);
+        elevatorSubsystem.setMotorSpeed(Constants.Elevator.speed * motorDirection);
 
     }
     @Override

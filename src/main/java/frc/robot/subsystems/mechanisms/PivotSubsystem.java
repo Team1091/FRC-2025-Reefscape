@@ -22,11 +22,12 @@ public class PivotSubsystem extends SubsystemBase {
     private final SparkMax pivotMotor;
     private final RelativeEncoder pivotEncoder;
     private final DigitalInput limitSwitch;
+    
     private double speed;
 
     public PivotSubsystem() {
-        this.pivotMotor = new SparkMax(Constants.Pivot.pivotMotor, MotorType.kBrushed);
-        this.limitSwitch = new DigitalInput(Constants.Pivot.limitSwitch);
+        this.pivotMotor = new SparkMax(Constants.Pivot.motorChannel, MotorType.kBrushed);
+        this.limitSwitch = new DigitalInput(Constants.Pivot.limitSwitchChannel);
         this.pivotEncoder = pivotMotor.getEncoder();
     }
 

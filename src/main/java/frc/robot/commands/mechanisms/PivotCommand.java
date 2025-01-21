@@ -7,11 +7,10 @@ import frc.robot.subsystems.mechanisms.PivotSubsystem;
 
 public class PivotCommand extends Command {
     private final PivotSubsystem pivotSubsystem;
-    private PivotPosition pivotPosition;
 
+    private PivotPosition pivotPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
-    //because Ben says it is cool
 
     public PivotCommand(PivotSubsystem pivotSubsystem, PivotPosition pivotPosition) {
         this.pivotSubsystem = pivotSubsystem;
@@ -21,14 +20,20 @@ public class PivotCommand extends Command {
 
     @Override
     public void initialize(){
-        if (pivotPosition == PivotPosition.out){
-            endPosition = Constants.Pivot.outEncoderPosition;
-        }else if(pivotPosition == PivotPosition.score){
-            endPosition = Constants.Pivot.scorePosition;
-        } else{
-            endPosition = 0;
+        switch (pivotPosition) {
+            case out:
+                endPosition = Constants.Pivot.outPosition;
+                break;
+        
+            case score:
+                endPosition = Constants.Pivot.scorePosition;
+                break;
+        
+            default:
+                endPosition = 0;
+                break;
         }
-
+        
         if (pivotSubsystem.getEncoderPosition() > endPosition){
             motorDirection = -1;
         }
@@ -36,7 +41,7 @@ public class PivotCommand extends Command {
 
     @Override
     public void execute() {
-        pivotSubsystem.setMotorSpeed(Constants.Pivot.pivotSpeed * motorDirection);
+        pivotSubsystem.setMotorSpeed(Constants.Pivot.speed * motorDirection);
 
     }
     @Override

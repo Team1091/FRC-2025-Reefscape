@@ -7,37 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle to G"
+            "pathName": "Start to Reef"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Score L4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "G to Right Coral"
+            "pathName": "Reef to Right Coral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Wait for Coral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Coral to C"
+            "pathName": "Right Coral to Reef"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "Score L4"
           }
         },
         {

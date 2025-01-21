@@ -40,51 +40,50 @@ public final class Constants {
                 new Translation2d(-trackWidthX / 2.0, -trackWidthY / 2.0) // BR
                 };
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
-
+        public static final double linearDeadband = 0.1;
+        public static final double rotationalDeadband = 0.1;    
     }
 
     public static final class Trough{
-        public static final int outputMotorChannel = 1;
+        public static final int motorChannel = 11;
+        public static final int limitSwitchChannel = 0;
         public static final double holdSpeed = 0.5;
         public static final double shootSpeed = -0.5;
     }
+
     public static final class Intake{
-        public static final int intakeMotorChannel = 1;
-        public static final double intakeSpeed = 0.5;
+        public static final int motorChannel = 12;
+        public static final double speed = 0.5;
     }
+
     public static final class Pivot{
-        public static final int pivotMotor = 1;
-        public static final int pivotEncoder1 = 1;
-        public static final int pivotEncoder2 = 1;
-        public static final int pivotEncoder3 = 1;
-        public static final int limitSwitch = 1;
-        public static final double pivotSpeed = 0.5;
-        public static final int outEncoderPosition = 0;
-        public static final int inEncoderPosition = 0;
-        public static final int scorePosition = 0;
+        public static final int motorChannel = 13;
+        public static final int limitSwitchChannel = 1;
+        public static final double speed = 0.5;
+        public static final double outPosition = 0;
+        public static final double inPosition = 0;
+        public static final double scorePosition = 0;
     }
+
     public static final class Elevator{
-        public static final int elevatormotor= 0;
-        public static final int elevatorEncoder1 = 1;
-        public static final int elevatorEncoder2 = 1;
-        public static final int elevatorEncoder3 = 1;
-        public static final int elevatorlimitSwitch = 1;
-        public static final double elevatorSpeed = 0.5;
-        public static final int l2EncoderPosition = 0;
-        public static final int l3EncoderPosition = 0;
-        public static final int l4Position = 0;
+        public static final int motorChannel = 14;
+        public static final int limitSwitchChannel = 2;
+        public static final double speed = 0.5;
+        public static final double l2Position = 0;
+        public static final double l3Position = 0;
+        public static final double l4Position = 0;
+        public static final double algae1Position = 0;
+        public static final double algae2Position = 0;
     }
-    public static final class Dealgae{
-        public static final int dealgaemotor= 0;
-        public static final int dealgaeEncoder1 = 1;
-        public static final int dealgaeEncoder2 = 1;
-        public static final int dealgaeEncoder3 = 1;
-        public static final int dealgaelimitSwitch = 1;
-        public static final double dealgaeSpeed = 0.5;
-        public static final int outEncoderPosition = 0;
-        public static final int inEncoderPosition = 0;
-        
+
+    public static final class Extendo{
+        public static final int motorChannel = 15;
+        public static final int limitSwitchChannel = 3;
+        public static final double speed = 0.5;
+        public static final double outPosition = 0;
+        public static final double inPosition = 0;
     }
+
     public static final class PoseEstimation {
         public final static Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
         public final static Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(.7,.7,9999999);
@@ -96,10 +95,5 @@ public final class Constants {
                 new PIDConstants(3, 0, 0) // 1.3 Rotation constants 3
                 );
         public static final RobotConfig config = new RobotConfig(15, 1, new ModuleConfig(0.0508, 3, 1.2, DCMotor.getNEO(1).withReduction((50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0)), 120.0, 1), trackWidthX);
-
     }
-    
-    public static final double linearDeadband = 0.1;
-    public static final double rotationalDeadband = .1;
-
 }

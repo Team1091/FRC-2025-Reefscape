@@ -13,12 +13,13 @@ public class ElevatorSubsystem extends SubsystemBase{
     private final SparkMax elevatorMotor;
     private final RelativeEncoder elevatorEncoder;
     private final DigitalInput elevatorlimitSwitch;
+    
     private double speed;
 
     public ElevatorSubsystem() {
-        this.elevatorMotor = new SparkMax(Constants.Elevator.elevatormotor, MotorType.kBrushed);
+        this.elevatorMotor = new SparkMax(Constants.Elevator.motorChannel, MotorType.kBrushed);
         this.elevatorEncoder = elevatorMotor.getEncoder();
-        this.elevatorlimitSwitch = new DigitalInput(Constants.Elevator.elevatorlimitSwitch);
+        this.elevatorlimitSwitch = new DigitalInput(Constants.Elevator.limitSwitchChannel);
     }
 
     public void resetEncoder() {
