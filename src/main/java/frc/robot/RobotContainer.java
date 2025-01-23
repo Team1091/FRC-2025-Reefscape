@@ -11,10 +11,9 @@
 // ROBOTBUILDER TYPE: RobotContainer.
 
 package frc.robot;
-import frc.robot.Constants.Trough;
 import frc.robot.commands.*;
 import frc.robot.commands.mechanisms.ElevatorCommand;
-import frc.robot.commands.mechanisms.ExtendoCommand;
+import frc.robot.commands.mechanisms.ExtenderCommand;
 import frc.robot.commands.mechanisms.LimitSwitchWaitCommand;
 import frc.robot.commands.mechanisms.TroughCommand;
 import frc.robot.enums.ElevatorPosition;
@@ -23,7 +22,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
-import frc.robot.subsystems.mechanisms.ExtendoSubsystem;
+import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
 import frc.robot.subsystems.mechanisms.PivotSubsystem;
@@ -33,8 +32,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -47,15 +44,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
 
 import static frc.robot.Constants.Swerve.*;
-
-import java.util.List;
 
 public class RobotContainer {
 
@@ -64,7 +55,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final Drive drive;
   private final PoseEstimationSubsystem poseEstimationSubsystem;
-  private final ExtendoSubsystem extendoSubsystem;
+  private final ExtenderSubsystem extenderSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
   private final IntakeSubsystemFront intakeSubsystemFront;
   private final IntakeSubsystemBack intakeSubsystemBack;
@@ -97,7 +88,7 @@ public class RobotContainer {
 
     drive.configureAutoBuilder(poseEstimationSubsystem);
 
-    extendoSubsystem = new ExtendoSubsystem();
+    extenderSubsystem = new ExtenderSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
     intakeSubsystemFront = new IntakeSubsystemFront();
     intakeSubsystemBack = new IntakeSubsystemBack();
@@ -178,14 +169,14 @@ public class RobotContainer {
   public Command dealgaeCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
       new ElevatorCommand(elevatorSubsystem, level),
-      new ExtendoCommand(extendoSubsystem, true),
+      new ExtenderCommand(extenderSubsystem, true),
       new ParallelRaceGroup(
         new TroughCommand(troughSubsystem, Constants.Trough.shootSpeed),
         new TimerCommand(1000)
       ),
       new ParallelCommandGroup(
         new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down),
-        new ExtendoCommand(extendoSubsystem, false)
+        new ExtenderCommand(extenderSubsystem, false)
       )
     );
   }

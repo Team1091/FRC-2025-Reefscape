@@ -1,20 +1,14 @@
 package frc.robot;
 
-import static frc.robot.Constants.Swerve.driveBaseRadius;
 import static frc.robot.Constants.Swerve.trackWidthX;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-
-import java.util.Map;
 
 import com.pathplanner.lib.config.*;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -76,7 +70,7 @@ public final class Constants {
         public static final double algae2Position = 0;
     }
 
-    public static final class Extendo{
+    public static final class Extender {
         public static final int motorChannel = 15;
         public static final int limitSwitchChannel = 3;
         public static final double speed = 0.5;

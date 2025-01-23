@@ -8,28 +8,28 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ExtendoSubsystem extends SubsystemBase{
-    private final SparkMax dealgaeMotor;
-    private final RelativeEncoder dealgaeEncoder;
-    private final DigitalInput dealgaelimitSwitch;
+public class ExtenderSubsystem extends SubsystemBase{
+    private final SparkMax extenderMotor;
+    private final RelativeEncoder extenderEncoder;
+    private final DigitalInput extenderlimitSwitch;
     
     private double speed;
 
-    public ExtendoSubsystem() {
-        this.dealgaeMotor = new SparkMax(Constants.Extendo.motorChannel, MotorType.kBrushed);
-        this.dealgaeEncoder = dealgaeMotor.getEncoder();
-        this.dealgaelimitSwitch = new DigitalInput(Constants.Extendo.limitSwitchChannel);
+    public ExtenderSubsystem() {
+        this.extenderMotor = new SparkMax(Constants.Extender.motorChannel, MotorType.kBrushed);
+        this.extenderEncoder = extenderMotor.getEncoder();
+        this.extenderlimitSwitch = new DigitalInput(Constants.Extender.limitSwitchChannel);
     }
 
     public void resetEncoder() {
-        dealgaeEncoder.setPosition(0);
+        extenderEncoder.setPosition(0);
     }
 
     public double getEncoderPosition() {
-        return dealgaeEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
+        return extenderEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
     public boolean getLimitSwitch(){
-        return dealgaelimitSwitch.get();
+        return extenderlimitSwitch.get();
     }
     public void setMotorSpeed(double speed) {
         this.speed = speed;
@@ -39,7 +39,7 @@ public class ExtendoSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         //sets voltage from -1 to 1 not actual rpm
-        dealgaeMotor.set(speed);
+        extenderMotor.set(speed);
         if(getLimitSwitch()){
             resetEncoder();
         }
