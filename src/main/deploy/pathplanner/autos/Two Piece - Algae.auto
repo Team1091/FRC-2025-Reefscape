@@ -39,12 +39,6 @@
           "data": {
             "name": "Score L4"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
         }
       ]
     }
