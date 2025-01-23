@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystemFront extends SubsystemBase {
-    private final SparkMax intakemotorFront = new SparkMax(Constants.Intake.motorChannel, MotorType.kBrushless);
+    private final SparkMax intakemotorFront = new SparkMax(Constants.Intake.frontMotorChannel, MotorType.kBrushless);
     
     private double speed;
 

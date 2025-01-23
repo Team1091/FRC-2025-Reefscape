@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.enums.ElevatorPosition;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
-import frc.robot.subsystems.mechanisms.TroughSubsystem;
+import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 
 public class LimitSwitchWaitCommand extends Command{
-    private final TroughSubsystem troughSubsystem;
+    private final ChuteSubsystem troughSubsystem;
     
     private boolean on;
 
-    public LimitSwitchWaitCommand(TroughSubsystem troughSubsystem, boolean on) {
+    public LimitSwitchWaitCommand(ChuteSubsystem troughSubsystem, boolean on) {
         this.troughSubsystem = troughSubsystem;
         this.on = on;
         addRequirements(troughSubsystem);

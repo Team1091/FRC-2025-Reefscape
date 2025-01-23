@@ -2,10 +2,14 @@ package frc.robot;
 
 import static frc.robot.Constants.Swerve.trackWidthX;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -38,7 +42,7 @@ public final class Constants {
         public static final double rotationalDeadband = 0.1;    
     }
 
-    public static final class Trough{
+    public static final class Chute{
         public static final int motorChannel = 11;
         public static final int limitSwitchChannel = 0;
         public static final double holdSpeed = 0.5;
@@ -46,12 +50,14 @@ public final class Constants {
     }
 
     public static final class Intake{
-        public static final int motorChannel = 12;
-        public static final double speed = 0.5;
+        public static final int frontMotorChannel = 12;
+        public static final int backMotorChannel = 13;
+        public static final double frontSpeed = 0.5;
+        public static final double backSpeed = 0.5;
     }
 
     public static final class Pivot{
-        public static final int motorChannel = 13;
+        public static final int motorChannel = 14;
         public static final int limitSwitchChannel = 1;
         public static final double speed = 0.5;
         public static final double outPosition = 0;
@@ -60,7 +66,7 @@ public final class Constants {
     }
 
     public static final class Elevator{
-        public static final int motorChannel = 14;
+        public static final int motorChannel = 15;
         public static final int limitSwitchChannel = 2;
         public static final double speed = 0.5;
         public static final double l2Position = 0;
@@ -71,7 +77,7 @@ public final class Constants {
     }
 
     public static final class Extender {
-        public static final int motorChannel = 15;
+        public static final int motorChannel = 16;
         public static final int limitSwitchChannel = 3;
         public static final double speed = 0.5;
         public static final double outPosition = 0;

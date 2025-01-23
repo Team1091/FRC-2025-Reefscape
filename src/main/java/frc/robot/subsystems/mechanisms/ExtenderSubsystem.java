@@ -40,6 +40,7 @@ public class ExtenderSubsystem extends SubsystemBase{
     public void periodic() {
         //sets voltage from -1 to 1 not actual rpm
         extenderMotor.set(speed);
+        
         if(getLimitSwitch()){
             resetEncoder();
         }

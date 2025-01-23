@@ -3,6 +3,8 @@
   "robotLength": 0.762,
   "holonomicMode": true,
   "pathFolders": [
+    "Algae Waypoints",
+    "Pathfind To",
     "Reef Waypoints"
   ],
   "autoFolders": [],

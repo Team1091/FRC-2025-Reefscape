@@ -41,6 +41,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     public void periodic() {
         //sets voltage from -1 to 1 not actual rpm
         elevatorMotor.set(speed);
+        
         if(getLimitSwitch()){
             resetEncoder();
         }

@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class TroughSubsystem extends SubsystemBase{
+public class ChuteSubsystem extends SubsystemBase{
 
-    private final SparkMax outputMotor = new SparkMax(Constants.Trough.motorChannel, MotorType.kBrushless);
-    private final DigitalInput limitSwitch = new DigitalInput(Constants.Trough.limitSwitchChannel);
+    private final SparkMax outputMotor = new SparkMax(Constants.Chute.motorChannel, MotorType.kBrushless);
+    private final DigitalInput limitSwitch = new DigitalInput(Constants.Chute.limitSwitchChannel);
 
     private double speed;
 
