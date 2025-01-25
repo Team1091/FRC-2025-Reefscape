@@ -86,19 +86,19 @@ public class RobotContainer {
 
   // Vars
   private ElevatorPosition scoreLevel = ElevatorPosition.l4;
-  private static final List<Translation2d> waypoints = List.of(
+  private final List<Translation2d> waypoints = List.of(
           new Translation2d(3, 4),
           new Translation2d(3.75, 2.742),
           new Translation2d(5.219, 2.742),
           new Translation2d(5.956, 4),
           new Translation2d(5.219, 5.316),
           new Translation2d(3.75, 5.316),
-          new Translation2d(5.956 + 8.75, 4),
-          new Translation2d(5.219 + 8.75, 5.316),
-          new Translation2d(3.75 + 8.75, 5.316),
-          new Translation2d(3 + 8.75, 4),
-          new Translation2d(3.75 + 8.75, 2.742),
-          new Translation2d(5.219 + 8.75, 2.742)
+          new Translation2d(14.719, 4),
+          new Translation2d(13.969, 5.316),
+          new Translation2d(12.5, 5.316),
+          new Translation2d(11.75, 4),
+          new Translation2d(12.5, 2.742),
+          new Translation2d(13.969, 2.742)
   );
   private String reefPosition = "right";
 
