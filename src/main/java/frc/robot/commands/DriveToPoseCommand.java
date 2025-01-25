@@ -10,26 +10,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.PoseEstimationSubsystem;
-import frc.robot.subsystems.drive.Drive;
 
 import java.util.List;
 
 public class DriveToPoseCommand extends Command {
-    private final Drive drive;
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final double finalX;
     private final double finalY;
     private final Rotation2d finalRotation;
 
-    public DriveToPoseCommand(Drive drive, PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, double finalRotation) {
-        this.drive = drive;
+    public DriveToPoseCommand(PoseEstimationSubsystem poseEstimationSubsystem, double finalX, double finalY, double finalRotation) {
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.finalX = finalX;
         this.finalY = finalY;
         this.finalRotation = new Rotation2d(finalRotation * (Math.PI / 180));
-        addRequirements(drive);
+        addRequirements(poseEstimationSubsystem);
     }
 
     @Override

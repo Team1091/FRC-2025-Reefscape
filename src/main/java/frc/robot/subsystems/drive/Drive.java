@@ -7,11 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
@@ -20,7 +16,6 @@ import static frc.robot.Constants.PathPlanner.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 public class Drive extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -193,13 +188,13 @@ public class Drive extends SubsystemBase {
      * Returns the module states (turn angles and drive velocities) for all of the modules.
      */
 
-    private SwerveModuleState[] getModuleStates() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (int i = 0; i < 4; i++) {
-            states[i] = modules[i].getState();
-        }
-        return states;
-    }
+    // private SwerveModuleState[] getModuleStates() {
+    //     SwerveModuleState[] states = new SwerveModuleState[4];
+    //     for (int i = 0; i < 4; i++) {
+    //         states[i] = modules[i].getState();
+    //     }
+    //     return states;
+    // }
 
     public SwerveModulePosition[] getModulePositions() {
         return modulePositions;

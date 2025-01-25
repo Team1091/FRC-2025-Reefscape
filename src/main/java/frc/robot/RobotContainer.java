@@ -51,7 +51,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
@@ -88,7 +87,6 @@ public class RobotContainer {
   private ElevatorPosition scoreLevel = ElevatorPosition.l4;
   private ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
   private String reefPosition = "right";
-  private String currentSelection = "l4, right";
 
   /**
   * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -217,10 +215,12 @@ public class RobotContainer {
 
   public void setScoreLevel(ElevatorPosition scoreLevel){
     this.scoreLevel = scoreLevel;
+    SmartDashboard.putString("Score Level", scoreLevel.toString());
   }
 
   public void setReefPosition(String reefPosition){
     this.reefPosition = reefPosition;
+    SmartDashboard.putString("Reef Position", reefPosition);
   }
 
   public Command driveToReefCommand(){
@@ -298,4 +298,3 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 }
-
