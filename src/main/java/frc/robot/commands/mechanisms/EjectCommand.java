@@ -3,15 +3,15 @@ package frc.robot.commands.mechanisms;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 
-public class WheelCommand extends Command{
+public class EjectCommand extends Command{
     private final ChuteSubsystem chuteSubsystem;
 
     private double speed;
 
-    public WheelCommand(ChuteSubsystem troughSubsystem, double speed){
-        this.chuteSubsystem = troughSubsystem;
+    public EjectCommand(ChuteSubsystem chuteSubsystem, double speed){
+        this.chuteSubsystem = chuteSubsystem;
         this.speed = speed;
-        addRequirements(troughSubsystem);
+        addRequirements(chuteSubsystem);
     }
 
     @Override
@@ -20,5 +20,10 @@ public class WheelCommand extends Command{
     @Override
     public void end(boolean interrupted){
         chuteSubsystem.setSpeed(0);
+    }
+
+    @Override
+    public boolean isFinished(){
+        return !chuteSubsystem.getLimitSwitch();
     }
 }

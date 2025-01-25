@@ -59,10 +59,10 @@ public class PivotCommandAutomatic extends Command {
                 return true;
             }
         } else {
-            if (pivotSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
+            if (pivotSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1){
                 return true;
             }
-            if (pivotSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
+            if (pivotSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1){
                 return true;
             }
         }
