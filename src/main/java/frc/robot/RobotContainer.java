@@ -12,12 +12,15 @@
 
 package frc.robot;
 import frc.robot.commands.*;
-import frc.robot.commands.mechanisms.ElevatorCommand;
-import frc.robot.commands.mechanisms.ExtenderCommand;
+import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
+import frc.robot.commands.mechanisms.ElevatorCommandManual;
+import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
+import frc.robot.commands.mechanisms.ExtenderCommandManual;
 import frc.robot.commands.mechanisms.IntakeCommandBack;
 import frc.robot.commands.mechanisms.IntakeCommandFront;
 import frc.robot.commands.mechanisms.LimitSwitchWaitCommand;
-import frc.robot.commands.mechanisms.PivotCommand;
+import frc.robot.commands.mechanisms.PivotCommandAutomatic;
+import frc.robot.commands.mechanisms.PivotCommandManual;
 import frc.robot.commands.mechanisms.WheelCommand;
 import frc.robot.enums.ElevatorPosition;
 import frc.robot.enums.PivotPosition;
@@ -83,8 +86,9 @@ public class RobotContainer {
 
   // Vars
   private ElevatorPosition scoreLevel = ElevatorPosition.l4;
-  private String reefPosition = "right";
   private ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
+  private String reefPosition = "right";
+  private String currentSelection = "l4, right";
 
   /**
   * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -162,10 +166,15 @@ public class RobotContainer {
     driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
     driver.x().onFalse(returnDealgaeCommand());
 
-    driver.leftTrigger().onTrue(new PivotCommand(pivotSubsystem, PivotPosition.out));
-    driver.leftTrigger().onFalse(new PivotCommand(pivotSubsystem, PivotPosition.in));
+    driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
+    driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
+
+    driver.leftTrigger().onTrue(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out));
+    driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
     driver.leftTrigger().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));
     driver.leftBumper().onTrue(toChuteCommand());
+
+    driver.back().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 
     //Second Driver
     secondDriver.povUp().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l4)));
@@ -175,6 +184,12 @@ public class RobotContainer {
     secondDriver.x().onTrue(Commands.runOnce(() -> setReefPosition("left")));
     secondDriver.a().onTrue(Commands.runOnce(() -> setReefPosition("algae")));
     secondDriver.b().onTrue(Commands.runOnce(() -> setReefPosition("right")));
+
+    secondDriver.leftTrigger().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
+    secondDriver.leftBumper().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
+
+    secondDriver.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Pivot.speed));
+    secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Pivot.speed));
   }
 
   private void populateWaypoints(){
@@ -234,33 +249,33 @@ public class RobotContainer {
 
   public Command scoreCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
-      new ElevatorCommand(elevatorSubsystem, level),
+      new ElevatorCommandAutomatic(elevatorSubsystem, level),
       new ParallelRaceGroup(
         new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed),
         new LimitSwitchWaitCommand(chuteSubsystem, false)
       ),
-      new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down)
+      new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
     );
   }
 
   public Command dealgaeCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
-      new ElevatorCommand(elevatorSubsystem, level),
-      new ExtenderCommand(extenderSubsystem, true),
+      new ElevatorCommandAutomatic(elevatorSubsystem, level),
+      new ExtenderCommandAutomatic(extenderSubsystem, true),
       new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
     );
   }
 
   public Command returnDealgaeCommand(){
     return new ParallelCommandGroup(
-      new ElevatorCommand(elevatorSubsystem, ElevatorPosition.down),
-      new ExtenderCommand(extenderSubsystem, false)
+      new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
+      new ExtenderCommandAutomatic(extenderSubsystem, false)
     );
   }
 
   public Command toChuteCommand(){
     return new SequentialCommandGroup(
-      new PivotCommand(pivotSubsystem, PivotPosition.in),
+      new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in),
       new ParallelRaceGroup(
         new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed),
         new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.frontSpeed),
@@ -271,7 +286,7 @@ public class RobotContainer {
 
   public Command scoreTroughCommand(){
     return new SequentialCommandGroup(
-      new PivotCommand(pivotSubsystem, PivotPosition.score),
+      new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
       new ParallelRaceGroup(
         new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.frontSpeed),
         new IntakeCommandBack(intakeSubsystemBack, -Constants.Intake.frontSpeed)

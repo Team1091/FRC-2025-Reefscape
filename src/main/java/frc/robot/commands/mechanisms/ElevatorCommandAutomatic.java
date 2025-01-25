@@ -3,15 +3,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.enums.ElevatorPosition;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
-public class ElevatorCommand extends Command{
+public class ElevatorCommandAutomatic extends Command{
     private final ElevatorSubsystem elevatorSubsystem;
 
     private ElevatorPosition elevatorPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
-    //because Ben says it is cool
 
-    public ElevatorCommand(ElevatorSubsystem elevatorSubsystem, ElevatorPosition elevatorPosition) {
+    public ElevatorCommandAutomatic(ElevatorSubsystem elevatorSubsystem, ElevatorPosition elevatorPosition) {
         this.elevatorSubsystem = elevatorSubsystem;
         this.elevatorPosition = elevatorPosition;
         addRequirements(elevatorSubsystem);
@@ -42,7 +41,7 @@ public class ElevatorCommand extends Command{
                 break;
         }
 
-        if (elevatorSubsystem.getEncoderPosition()> endPosition){
+        if (elevatorSubsystem.getEncoderPosition() > endPosition){
             motorDirection = -1;
         }
     }
@@ -50,7 +49,6 @@ public class ElevatorCommand extends Command{
     @Override
     public void execute() {
         elevatorSubsystem.setMotorSpeed(Constants.Elevator.speed * motorDirection);
-
     }
     @Override
     public void end(boolean interrupted){
@@ -59,11 +57,23 @@ public class ElevatorCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        if (elevatorSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
+        if (elevatorSubsystem.getLimitSwitchTop() && motorDirection == 1){
             return true;
         }
-        if (elevatorSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
+        if (elevatorSubsystem.getLimitSwitchBottom() && motorDirection == -1){
             return true;
+        }
+        if (endPosition == 0){
+            if (elevatorSubsystem.getLimitSwitchBottom()){
+                return true;
+            }
+        } else {
+            if (elevatorSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1){
+                return true;
+            }
+            if (elevatorSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1){
+                return true;
+            }
         }
         return false;
     }

@@ -5,14 +5,14 @@ import frc.robot.Constants;
 import frc.robot.enums.PivotPosition;
 import frc.robot.subsystems.mechanisms.PivotSubsystem;
 
-public class PivotCommand extends Command {
+public class PivotCommandAutomatic extends Command {
     private final PivotSubsystem pivotSubsystem;
 
     private PivotPosition pivotPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
 
-    public PivotCommand(PivotSubsystem pivotSubsystem, PivotPosition pivotPosition) {
+    public PivotCommandAutomatic(PivotSubsystem pivotSubsystem, PivotPosition pivotPosition) {
         this.pivotSubsystem = pivotSubsystem;
         this.pivotPosition = pivotPosition;
         addRequirements(pivotSubsystem);
@@ -51,11 +51,20 @@ public class PivotCommand extends Command {
 
     @Override
     public boolean isFinished(){
-        if (pivotSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
+        if (pivotSubsystem.getLimitSwitch() && motorDirection == -1){
             return true;
         }
-        if (pivotSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
-            return true;
+        if (endPosition == 0){
+            if (pivotSubsystem.getLimitSwitch()){
+                return true;
+            }
+        } else {
+            if (pivotSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
+                return true;
+            }
+            if (pivotSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
+                return true;
+            }
         }
         return false;
     }

@@ -46,7 +46,7 @@ public final class Constants {
         public static final int motorChannel = 11;
         public static final int limitSwitchChannel = 0;
         public static final double holdSpeed = 0.5;
-        public static final double shootSpeed = -0.5;
+        public static final double shootSpeed = 0.1;
     }
 
     public static final class Intake{
@@ -61,13 +61,13 @@ public final class Constants {
         public static final int limitSwitchChannel = 1;
         public static final double speed = 0.5;
         public static final double outPosition = 0;
-        public static final double inPosition = 0;
         public static final double scorePosition = 0;
     }
 
     public static final class Elevator{
         public static final int motorChannel = 15;
-        public static final int limitSwitchChannel = 2;
+        public static final int limitSwitchChannelTop = 2;
+        public static final int limitSwitchChannelBottom = 3;
         public static final double speed = 0.5;
         public static final double l2Position = 0;
         public static final double l3Position = 0;
@@ -78,10 +78,9 @@ public final class Constants {
 
     public static final class Extender {
         public static final int motorChannel = 16;
-        public static final int limitSwitchChannel = 3;
+        public static final int limitSwitchChannel = 4;
         public static final double speed = 0.5;
         public static final double outPosition = 0;
-        public static final double inPosition = 0;
     }
 
     public static final class PoseEstimation {

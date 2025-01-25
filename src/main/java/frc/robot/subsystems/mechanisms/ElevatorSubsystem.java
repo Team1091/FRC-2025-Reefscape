@@ -12,14 +12,16 @@ public class ElevatorSubsystem extends SubsystemBase{
     //motors are defined by the type of their motor controller (ask electrical)
     private final SparkMax elevatorMotor;
     private final RelativeEncoder elevatorEncoder;
-    private final DigitalInput elevatorlimitSwitch;
+    private final DigitalInput elevatorlimitSwitchTop;
+    private final DigitalInput elevatorlimitSwitchBottom;
     
     private double speed;
 
     public ElevatorSubsystem() {
         this.elevatorMotor = new SparkMax(Constants.Elevator.motorChannel, MotorType.kBrushed);
         this.elevatorEncoder = elevatorMotor.getEncoder();
-        this.elevatorlimitSwitch = new DigitalInput(Constants.Elevator.limitSwitchChannel);
+        this.elevatorlimitSwitchTop = new DigitalInput(Constants.Elevator.limitSwitchChannelTop);
+        this.elevatorlimitSwitchBottom = new DigitalInput(Constants.Elevator.limitSwitchChannelBottom);
     }
 
     public void resetEncoder() {
@@ -29,9 +31,15 @@ public class ElevatorSubsystem extends SubsystemBase{
     public double getEncoderPosition() {
         return elevatorEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
-    public boolean getLimitSwitch(){
-        return elevatorlimitSwitch.get();
+
+    public boolean getLimitSwitchTop(){
+        return elevatorlimitSwitchTop.get();
     }
+
+    public boolean getLimitSwitchBottom(){
+        return elevatorlimitSwitchBottom.get();
+    }
+
     public void setMotorSpeed(double speed) {
         this.speed = speed;
     }
@@ -42,7 +50,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         //sets voltage from -1 to 1 not actual rpm
         elevatorMotor.set(speed);
         
-        if(getLimitSwitch()){
+        if(getLimitSwitchBottom()){
             resetEncoder();
         }
     }

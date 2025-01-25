@@ -4,14 +4,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 
-public class ExtenderCommand extends Command{
+public class ExtenderCommandAutomatic extends Command{
     private final ExtenderSubsystem extenderSubsystem;
     
     private boolean isOut;
-    private double endPosition = 0;
-    private int motorDirection = 1;
+    private int motorDirection = -1;
 
-    public ExtenderCommand(ExtenderSubsystem extenderSubsystem, boolean isOut) {
+    public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, boolean isOut) {
         this.extenderSubsystem = extenderSubsystem;
         this.isOut = isOut;
         addRequirements(extenderSubsystem);
@@ -19,14 +18,8 @@ public class ExtenderCommand extends Command{
 
     @Override
     public void initialize(){
-        if (isOut == true){
-            endPosition = Constants.Extender.outPosition;
-        } else{
-            endPosition = Constants.Extender.inPosition;
-        }
-
-        if (extenderSubsystem.getEncoderPosition() > endPosition){
-            motorDirection = -1;
+        if (isOut){
+            motorDirection = 1;
         }
     }
 
@@ -34,6 +27,7 @@ public class ExtenderCommand extends Command{
     public void execute() {
         extenderSubsystem.setMotorSpeed(Constants.Extender.speed * motorDirection);
     }
+
     @Override
     public void end(boolean interrupted){
         extenderSubsystem.setMotorSpeed(0);
@@ -41,11 +35,14 @@ public class ExtenderCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        if (extenderSubsystem.getEncoderPosition() < endPosition && motorDirection == -1){
-            return true;
-        }
-        if (extenderSubsystem.getEncoderPosition() > endPosition && motorDirection == 1){
-            return true;
+        if (isOut){
+            if (extenderSubsystem.getEncoderPosition() > Constants.Extender.outPosition){
+                return true;
+            }         
+        } else {
+            if (extenderSubsystem.getLimitSwitch()){
+                return true;
+            }
         }
         return false;
     }

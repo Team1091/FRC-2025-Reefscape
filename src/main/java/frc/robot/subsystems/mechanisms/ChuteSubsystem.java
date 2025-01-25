@@ -23,6 +23,10 @@ public class ChuteSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        outputMotor.set(speed);
+        if (getLimitSwitch() && speed == 0){
+            outputMotor.set(Constants.Chute.holdSpeed);
+        } else {
+            outputMotor.set(speed);
+        }
     }
 }

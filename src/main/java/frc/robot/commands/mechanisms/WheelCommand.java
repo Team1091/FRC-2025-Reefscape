@@ -1,7 +1,6 @@
 package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 
 public class WheelCommand extends Command{
@@ -20,6 +19,6 @@ public class WheelCommand extends Command{
 
     @Override
     public void end(boolean interrupted){
-        troughSubsystem.setSpeed(0.0);
+        troughSubsystem.setSpeed(0);
     }
 }
