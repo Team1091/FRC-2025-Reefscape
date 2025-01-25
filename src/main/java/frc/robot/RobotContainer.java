@@ -12,6 +12,7 @@
 
 package frc.robot;
 import frc.robot.commands.*;
+import frc.robot.commands.mechanisms.EjectCommand;
 import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
@@ -197,12 +198,12 @@ public class RobotContainer {
     waypoints.add(new Translation2d(5.956, 4));
     waypoints.add(new Translation2d(5.219, 5.316));
     waypoints.add(new Translation2d(3.75, 5.316));
-    waypoints.add(new Translation2d(5.956 + 8.75, 4));
-    waypoints.add(new Translation2d(5.219 + 8.75, 5.316));
-    waypoints.add(new Translation2d(3.75 + 8.75, 5.316));
-    waypoints.add(new Translation2d(3 + 8.75, 4));
-    waypoints.add(new Translation2d(3.75 + 8.75, 2.742));
-    waypoints.add(new Translation2d(5.219 + 8.75, 2.742));
+    waypoints.add(new Translation2d(14.706, 4));
+    waypoints.add(new Translation2d(13.969, 5.316));
+    waypoints.add(new Translation2d(12.5, 5.316));
+    waypoints.add(new Translation2d(11.75, 4));
+    waypoints.add(new Translation2d(12.5, 2.742));
+    waypoints.add(new Translation2d(13.969, 2.742));
   }
 
   public void robotEnabled(){
@@ -224,11 +225,11 @@ public class RobotContainer {
   }
 
   public Command driveToReefCommand(){
-    int reefSide = waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
+    int reefSide = 1; //waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
     PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     try {
-      return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefPosition + " " + reefSide), constraints);
+      return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
     } catch (FileVersionException | IOException | ParseException e) {
       e.printStackTrace();
       return new SequentialCommandGroup();
@@ -237,6 +238,9 @@ public class RobotContainer {
 
   public Command driveToCoralStationCommand(){
     String name = (poseEstimationSubsystem.getCurrentPose().getY() > 4) ? "Left Coral" : "Right Coral";
+    if (drive.isOnRed()){
+      name = (poseEstimationSubsystem.getCurrentPose().getY() < 4) ? "Left Coral" : "Right Coral";
+    }
     PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     try {
@@ -250,10 +254,7 @@ public class RobotContainer {
   public Command scoreCommand(ElevatorPosition level){
     return new SequentialCommandGroup(
       new ElevatorCommandAutomatic(elevatorSubsystem, level),
-      new ParallelRaceGroup(
-        new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed),
-        new LimitSwitchWaitCommand(chuteSubsystem, false)
-      ),
+      new EjectCommand(chuteSubsystem, Constants.Chute.shootSpeed),
       new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
     );
   }
