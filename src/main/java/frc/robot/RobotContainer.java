@@ -59,7 +59,7 @@ import com.pathplanner.lib.util.FileVersionException;
 import static frc.robot.Constants.Swerve.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
@@ -86,7 +86,20 @@ public class RobotContainer {
 
   // Vars
   private ElevatorPosition scoreLevel = ElevatorPosition.l4;
-  private ArrayList<Translation2d> waypoints = new ArrayList<Translation2d>();
+  private static final List<Translation2d> waypoints = List.of(
+          new Translation2d(3, 4),
+          new Translation2d(3.75, 2.742),
+          new Translation2d(5.219, 2.742),
+          new Translation2d(5.956, 4),
+          new Translation2d(5.219, 5.316),
+          new Translation2d(3.75, 5.316),
+          new Translation2d(5.956 + 8.75, 4),
+          new Translation2d(5.219 + 8.75, 5.316),
+          new Translation2d(3.75 + 8.75, 5.316),
+          new Translation2d(3 + 8.75, 4),
+          new Translation2d(3.75 + 8.75, 2.742),
+          new Translation2d(5.219 + 8.75, 2.742)
+  );
   private String reefPosition = "right";
 
   /**
@@ -115,7 +128,6 @@ public class RobotContainer {
 
     configureAutonomous();
     configureButtonBindings();
-    populateWaypoints();
     robotEnabled();
   }
 
@@ -191,21 +203,6 @@ public class RobotContainer {
     secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Pivot.speed));
   }
 
-  private void populateWaypoints(){
-    waypoints.add(new Translation2d(3, 4));
-    waypoints.add(new Translation2d(3.75, 2.742));
-    waypoints.add(new Translation2d(5.219, 2.742));
-    waypoints.add(new Translation2d(5.956, 4));
-    waypoints.add(new Translation2d(5.219, 5.316));
-    waypoints.add(new Translation2d(3.75, 5.316));
-    waypoints.add(new Translation2d(14.706, 4));
-    waypoints.add(new Translation2d(13.969, 5.316));
-    waypoints.add(new Translation2d(12.5, 5.316));
-    waypoints.add(new Translation2d(11.75, 4));
-    waypoints.add(new Translation2d(12.5, 2.742));
-    waypoints.add(new Translation2d(13.969, 2.742));
-  }
-
   public void robotEnabled(){
     poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
     drive.straightenWheels();
@@ -225,7 +222,7 @@ public class RobotContainer {
   }
 
   public Command driveToReefCommand(){
-    int reefSide = 1; //waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
+    int reefSide = waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
     PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 
     try {
