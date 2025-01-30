@@ -7,6 +7,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
@@ -26,6 +28,7 @@ public class Drive extends SubsystemBase {
     private ChassisSpeeds chassisSpeeds;
     private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
+    private StructArrayPublisher<SwerveModuleState> statePublisher;
 
     public Drive(
             GyroIO gyroIO,
@@ -42,6 +45,8 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = new SwerveModulePosition();
         }
+
+        statePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("States", SwerveModuleState.struct).publish();
     }
 
     public void periodic() {
@@ -61,6 +66,8 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = modules[i].getPosition();
         }
+        
+        statePublisher.set(getModuleStates());
     }
 
     public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem){
@@ -188,13 +195,13 @@ public class Drive extends SubsystemBase {
      * Returns the module states (turn angles and drive velocities) for all of the modules.
      */
 
-    // private SwerveModuleState[] getModuleStates() {
-    //     SwerveModuleState[] states = new SwerveModuleState[4];
-    //     for (int i = 0; i < 4; i++) {
-    //         states[i] = modules[i].getState();
-    //     }
-    //     return states;
-    // }
+    private SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            states[i] = modules[i].getState();
+        }
+        return states;
+    }
 
     public SwerveModulePosition[] getModulePositions() {
         return modulePositions;

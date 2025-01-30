@@ -14,19 +14,15 @@ public class PivotCommandManual extends Command{
 
     @Override
     public void execute() {
-        pivotSubsystem.setMotorSpeed(speed);
+        if(speed < 0 && pivotSubsystem.getLimitSwitch()){
+            pivotSubsystem.setMotorSpeed(0);
+        } else {
+            pivotSubsystem.setMotorSpeed(speed);
+        }
     }
 
     @Override
     public void end(boolean interrupted){
         pivotSubsystem.setMotorSpeed(0);
-    }
-
-    @Override
-    public boolean isFinished(){
-        if(speed < 0 && pivotSubsystem.getLimitSwitch()){
-            return true;
-        }
-        return false;
     }
 }

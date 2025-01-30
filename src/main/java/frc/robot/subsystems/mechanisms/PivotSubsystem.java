@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -39,7 +40,7 @@ public class PivotSubsystem extends SubsystemBase {
         return pivotEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
     public boolean getLimitSwitch(){
-        return limitSwitch.get();
+        return !limitSwitch.get();
     }
     public void setMotorSpeed(double speed) {
         this.speed = speed;
@@ -54,6 +55,8 @@ public class PivotSubsystem extends SubsystemBase {
         if(getLimitSwitch()){
             resetEncoder();
         }
+
+        SmartDashboard.putNumber("Pivot Encoder", getEncoderPosition());
     }
 }
 
