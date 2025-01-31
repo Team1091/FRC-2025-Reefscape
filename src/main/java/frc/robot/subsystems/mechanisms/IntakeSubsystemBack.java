@@ -14,7 +14,7 @@ public class IntakeSubsystemBack extends SubsystemBase{
     private double speed;
 
     public void setSpeed(double speed){
-        this.speed = speed;
+        this.speed = -speed;
     }
     @Override
     public void periodic() {

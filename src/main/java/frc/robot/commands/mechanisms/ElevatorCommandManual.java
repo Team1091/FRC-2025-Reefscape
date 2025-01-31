@@ -14,22 +14,15 @@ public class ElevatorCommandManual extends Command{
 
     @Override
     public void execute() {
-        elevatorSubsystem.setMotorSpeed(speed);
+        if(speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getLimitSwitchBottom()){
+            elevatorSubsystem.setMotorSpeed(0);
+        } else {
+            elevatorSubsystem.setMotorSpeed(speed);
+        }
     }
 
     @Override
     public void end(boolean interrupted){
         elevatorSubsystem.setMotorSpeed(0);
-    }
-
-    @Override
-    public boolean isFinished(){
-        if(speed > 0 && elevatorSubsystem.getLimitSwitchTop()){
-            return true;
-        }
-        if(speed < 0 && elevatorSubsystem.getLimitSwitchBottom()){
-            return true;
-        }
-        return false;
     }
 }

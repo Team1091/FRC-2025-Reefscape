@@ -16,19 +16,14 @@ public class ExtenderCommandManual extends Command{
 
     @Override
     public void execute() {
-        extenderSubsystem.setMotorSpeed(speed);
-    }
+        if(speed < 0 && extenderSubsystem.getLimitSwitch()){
+            extenderSubsystem.setMotorSpeed(0);
+        } else {
+            extenderSubsystem.setMotorSpeed(speed);
+        }    }
 
     @Override
     public void end(boolean interrupted){
         extenderSubsystem.setMotorSpeed(0);
-    }
-
-    @Override
-    public boolean isFinished(){
-        if(speed < 0 && extenderSubsystem.getLimitSwitch()){
-            return true;
-        }
-        return false;
     }
 }

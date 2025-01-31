@@ -29,7 +29,7 @@ public class ExtenderSubsystem extends SubsystemBase{
         return extenderEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
     public boolean getLimitSwitch(){
-        return extenderlimitSwitch.get();
+        return !extenderlimitSwitch.get();
     }
     public void setMotorSpeed(double speed) {
         this.speed = speed;

@@ -201,6 +201,13 @@ public class RobotContainer {
 
     secondDriver.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Pivot.speed));
     secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Pivot.speed));
+  
+    secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));
+    secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.frontSpeed));
+
+    secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));    
+    secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.backSpeed));
+
   }
 
   public void robotEnabled(){

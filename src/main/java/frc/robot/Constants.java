@@ -41,27 +41,27 @@ public final class Constants {
     public static final class Chute{
         public static final int motorChannel = 11;
         public static final int limitSwitchChannel = 1;
-        public static final double holdSpeed = 0.5;
-        public static final double shootSpeed = 0.1;
+        public static final double holdSpeed = 0.1;
+        public static final double shootSpeed = 0.5;
     }
 
     public static final class Intake{
-        public static final int frontMotorChannel = 12;
-        public static final int backMotorChannel = 13;
-        public static final double frontSpeed = 0.5;
-        public static final double backSpeed = 0.5;
+        public static final int frontMotorChannel = 16;
+        public static final int backMotorChannel = 15;
+        public static final double frontSpeed = 1;
+        public static final double backSpeed = 1;
     }
 
     public static final class Pivot{
         public static final int motorChannel = 17;
         public static final int limitSwitchChannel = 0;
-        public static final double speed = 0.1;
+        public static final double speed = 0.2;
         public static final double outPosition = 23;
         public static final double scorePosition = 10;
     }
 
     public static final class Elevator{
-        public static final int motorChannel = 15;
+        public static final int motorChannel = 12;
         public static final int limitSwitchChannelTop = 2;
         public static final int limitSwitchChannelBottom = 3;
         public static final double speed = 0.5;
@@ -73,7 +73,7 @@ public final class Constants {
     }
 
     public static final class Extender {
-        public static final int motorChannel = 16;
+        public static final int motorChannel = 13;
         public static final int limitSwitchChannel = 4;
         public static final double speed = 0.5;
         public static final double outPosition = 0;

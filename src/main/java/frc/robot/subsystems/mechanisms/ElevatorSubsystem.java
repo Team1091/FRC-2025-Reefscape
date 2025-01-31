@@ -33,11 +33,11 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public boolean getLimitSwitchTop(){
-        return elevatorlimitSwitchTop.get();
+        return !elevatorlimitSwitchTop.get();
     }
 
     public boolean getLimitSwitchBottom(){
-        return elevatorlimitSwitchBottom.get();
+        return !elevatorlimitSwitchBottom.get();
     }
 
     public void setMotorSpeed(double speed) {
