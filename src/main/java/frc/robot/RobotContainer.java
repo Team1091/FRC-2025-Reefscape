@@ -140,6 +140,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
     NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
     NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(chuteSubsystem, true));
+    NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 1000));
+    NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 1000));    
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -208,6 +210,7 @@ public class RobotContainer {
     secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));    
     secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.backSpeed));
 
+    secondDriver.povRight().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.backSpeed));
   }
 
   public void robotEnabled(){
@@ -276,6 +279,17 @@ public class RobotContainer {
       new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
       new ExtenderCommandAutomatic(extenderSubsystem, false)
     );
+  }
+
+  public Command dealageWaitCommand(ElevatorPosition level, int time){
+    return new SequentialCommandGroup(
+      new ParallelRaceGroup(
+        dealgaeCommand(level),
+        new TimerCommand(time)
+      ),
+      returnDealgaeCommand()
+    ); 
+
   }
 
   public Command toChuteCommand(){
