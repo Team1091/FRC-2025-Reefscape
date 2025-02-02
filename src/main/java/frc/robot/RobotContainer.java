@@ -173,6 +173,8 @@ public class RobotContainer {
     //Main Driver
     driver.rightTrigger().whileTrue(scoreCommand(scoreLevel));
     driver.rightBumper().whileTrue(scoreTroughCommand());
+    driver.rightBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
+
 
     driver.a().whileTrue(dealgaeCommand(ElevatorPosition.algae1));
     driver.a().onFalse(returnDealgaeCommand());
