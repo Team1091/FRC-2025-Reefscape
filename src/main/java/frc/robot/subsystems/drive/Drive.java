@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,11 +15,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
-import static frc.robot.Constants.Swerve.*;
-import static frc.robot.Constants.PathPlanner.*;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
+import static frc.robot.Constants.PathPlanner.config;
+import static frc.robot.Constants.PathPlanner.controller;
+import static frc.robot.Constants.Swerve.BACK_LEFT;
+import static frc.robot.Constants.Swerve.BACK_RIGHT;
+import static frc.robot.Constants.Swerve.FRONT_LEFT;
+import static frc.robot.Constants.Swerve.FRONT_RIGHT;
+import static frc.robot.Constants.Swerve.kinematics;
+import static frc.robot.Constants.Swerve.maxAngularSpeed;
+import static frc.robot.Constants.Swerve.maxLinearSpeed;
+import static frc.robot.Constants.Swerve.moduleTranslations;
 
 public class Drive extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -66,40 +73,40 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             modulePositions[i] = modules[i].getPosition();
         }
-        
+
         statePublisher.set(getModuleStates());
     }
 
-    public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem){
+    public void configureAutoBuilder(PoseEstimationSubsystem poseEstimationSubsystem) {
         RobotConfig localConfig;
-        try{
+        try {
             localConfig = RobotConfig.fromGUISettings();
-        } catch (Exception e){
+        } catch (Exception e) {
             localConfig = config;
             e.printStackTrace();
         }
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
-            poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> runVelocity(speeds),
-            controller, //The path planner controller
-            localConfig, // The robot configuration
-            this::isOnRed,
-            this // Reference to this subsystem to set requirements
+                this::getPose, // Robot pose supplier
+                poseEstimationSubsystem::setCurrentPose, // Method to reset odometry (will be called if your auto has a starting pose)
+                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                (speeds, feedforwards) -> runVelocity(speeds),
+                controller, //The path planner controller
+                localConfig, // The robot configuration
+                this::isOnRed,
+                this // Reference to this subsystem to set requirements
         );
     }
 
     /**
      * Runs the drive at the desired velocity.
      */
-    public void runVelocity(Translation2d linearVelocity, double omega){
+    public void runVelocity(Translation2d linearVelocity, double omega) {
         Rotation2d rotation;
 
         int invert = 1;
 
-        if (isOnRed()){
+        if (isOnRed()) {
             invert = -1;
         }
 
@@ -163,7 +170,7 @@ public class Drive extends SubsystemBase {
         stop();
     }
 
-    public void setFieldState(boolean bool){
+    public void setFieldState(boolean bool) {
         isFieldOriented = bool;
     }
 
@@ -223,11 +230,11 @@ public class Drive extends SubsystemBase {
         gyroIO.resetGyro();
     }
 
-    public boolean isOnRed(){
+    public boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                      return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
     }
 }

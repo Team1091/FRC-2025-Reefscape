@@ -1,11 +1,8 @@
-
 package frc.robot.subsystems.mechanisms;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,7 +20,7 @@ public class PivotSubsystem extends SubsystemBase {
     private final SparkMax pivotMotor;
     private final RelativeEncoder pivotEncoder;
     private final DigitalInput limitSwitch;
-    
+
     private double speed;
 
     public PivotSubsystem() {
@@ -39,9 +36,11 @@ public class PivotSubsystem extends SubsystemBase {
     public double getEncoderPosition() {
         return pivotEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
-    public boolean getLimitSwitch(){
+
+    public boolean getLimitSwitch() {
         return !limitSwitch.get();
     }
+
     public void setMotorSpeed(double speed) {
         this.speed = speed;
     }
@@ -51,8 +50,8 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic() {
         //sets voltage from -1 to 1 not actual rpm
         pivotMotor.set(speed);
-        
-        if(getLimitSwitch()){
+
+        if (getLimitSwitch()) {
             resetEncoder();
         }
 

@@ -5,7 +5,6 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -36,8 +35,8 @@ public class DriveToPoseCommand extends Command {
         // Create a list of waypoints from poses. Each pose represents one waypoint.
         // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            new Pose2d(initialPose.getX(), initialPose.getY(), heading),
-            new Pose2d(finalX, finalY, heading)
+                new Pose2d(initialPose.getX(), initialPose.getY(), heading),
+                new Pose2d(finalX, finalY, heading)
         );
 
         PathConstraints constraints = new PathConstraints(1.0, 1.0, 1.0, 1.0); // The constraints for this path.

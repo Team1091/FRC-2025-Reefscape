@@ -11,7 +11,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
-/** IO implementation for Pigeon2 */
+/**
+ * IO implementation for Pigeon2
+ */
 public class GyroIOPigeon2 implements GyroIO {
     private final Pigeon2 pigeon = new Pigeon2(5);
     private final StatusSignal<Angle> yaw = pigeon.getYaw();

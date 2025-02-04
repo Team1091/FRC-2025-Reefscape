@@ -1,12 +1,11 @@
 package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
 import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 
-public class LimitSwitchWaitCommand extends Command{
+public class LimitSwitchWaitCommand extends Command {
     private final ChuteSubsystem troughSubsystem;
-    
+
     private boolean on;
 
     public LimitSwitchWaitCommand(ChuteSubsystem troughSubsystem, boolean on) {
@@ -16,7 +15,7 @@ public class LimitSwitchWaitCommand extends Command{
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return on && troughSubsystem.getLimitSwitch() || !on && !troughSubsystem.getLimitSwitch();
     }
 }

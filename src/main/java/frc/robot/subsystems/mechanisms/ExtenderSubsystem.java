@@ -3,16 +3,15 @@ package frc.robot.subsystems.mechanisms;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class ExtenderSubsystem extends SubsystemBase{
+public class ExtenderSubsystem extends SubsystemBase {
     private final SparkMax extenderMotor;
     private final RelativeEncoder extenderEncoder;
     private final DigitalInput extenderlimitSwitch;
-    
+
     private double speed;
 
     public ExtenderSubsystem() {
@@ -28,9 +27,11 @@ public class ExtenderSubsystem extends SubsystemBase{
     public double getEncoderPosition() {
         return extenderEncoder.getPosition();//value is in encoder counts (does not return common units like degrees)
     }
-    public boolean getLimitSwitch(){
+
+    public boolean getLimitSwitch() {
         return !extenderlimitSwitch.get();
     }
+
     public void setMotorSpeed(double speed) {
         this.speed = speed;
     }
@@ -40,8 +41,8 @@ public class ExtenderSubsystem extends SubsystemBase{
     public void periodic() {
         //sets voltage from -1 to 1 not actual rpm
         extenderMotor.set(speed);
-        
-        if(getLimitSwitch()){
+
+        if (getLimitSwitch()) {
             resetEncoder();
         }
     }

@@ -18,9 +18,9 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     private final Supplier<Rotation2d> rotationSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
-    private Field2d field = new Field2d();    
+    private Field2d field = new Field2d();
 
-    public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier){
+    public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
         this.rotationSupplier = rotationSupplier;
         this.modulePositionSupplier = modulePositionSupplier;
 
@@ -34,22 +34,22 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
         LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
 
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         try {
-            if (limelightMeasurement.tagCount > 0){
+            if (limelightMeasurement.tagCount > 0) {
                 poseEstimator.addVisionMeasurement(
-                    limelightMeasurement.pose,
-                    limelightMeasurement.timestampSeconds);
+                        limelightMeasurement.pose,
+                        limelightMeasurement.timestampSeconds);
             }
         } catch (Exception e) {
             // TODO: handle exception
         }
-        
+
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);
         SmartDashboard.putNumber("X pos", getCurrentPose().getX());
@@ -68,19 +68,19 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         setCurrentPose(new Pose2d());
     }
 
-    public void resetDriveRotation(){
-        if (isOnRed()){
+    public void resetDriveRotation() {
+        if (isOnRed()) {
             poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), new Pose2d(getCurrentPose().getTranslation(), new Rotation2d(Math.PI)));
         } else {
             poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), new Pose2d(getCurrentPose().getTranslation(), new Rotation2d()));
         }
     }
 
-    public boolean isOnRed(){
+    public boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                      return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
+        if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
     }
 }

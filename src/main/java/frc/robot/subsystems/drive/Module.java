@@ -72,7 +72,7 @@ public class Module {
         // Constants here may change for SIM
         driveFeedforward = config.driveFeedForward().toSimpleMotorFeedforward();
         driveFeedback = config.drivePid().toPidController();
-        turnFeedback =config.turnPid().toPidController();
+        turnFeedback = config.turnPid().toPidController();
 
         turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
         setBrakeMode(true);

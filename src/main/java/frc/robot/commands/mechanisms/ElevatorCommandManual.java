@@ -1,7 +1,9 @@
 package frc.robot.commands.mechanisms;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
-public class ElevatorCommandManual extends Command{
+
+public class ElevatorCommandManual extends Command {
     private final ElevatorSubsystem elevatorSubsystem;
 
     private double speed;
@@ -14,7 +16,7 @@ public class ElevatorCommandManual extends Command{
 
     @Override
     public void execute() {
-        if(speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getLimitSwitchBottom()){
+        if (speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getLimitSwitchBottom()) {
             elevatorSubsystem.setMotorSpeed(0);
         } else {
             elevatorSubsystem.setMotorSpeed(speed);
@@ -22,7 +24,7 @@ public class ElevatorCommandManual extends Command{
     }
 
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         elevatorSubsystem.setMotorSpeed(0);
     }
 }

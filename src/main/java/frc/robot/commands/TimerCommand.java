@@ -6,17 +6,17 @@ public class TimerCommand extends Command {
     private long currentTime = 0;
     private long delayMilli;
 
-    public TimerCommand(long delayMilli){
+    public TimerCommand(long delayMilli) {
         this.delayMilli = delayMilli;
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         currentTime = System.currentTimeMillis();
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return System.currentTimeMillis() - currentTime >= delayMilli;
     }
 }

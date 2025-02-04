@@ -19,22 +19,22 @@ public class PivotCommandAutomatic extends Command {
     }
 
     @Override
-    public void initialize(){
+    public void initialize() {
         switch (pivotPosition) {
             case out:
                 endPosition = Constants.Pivot.outPosition;
                 break;
-        
+
             case score:
                 endPosition = Constants.Pivot.scorePosition;
                 break;
-        
+
             default:
                 endPosition = 0;
                 break;
         }
-        
-        if (pivotSubsystem.getEncoderPosition() > endPosition){
+
+        if (pivotSubsystem.getEncoderPosition() > endPosition) {
             motorDirection = -1;
         }
     }
@@ -44,28 +44,24 @@ public class PivotCommandAutomatic extends Command {
         pivotSubsystem.setMotorSpeed(Constants.Pivot.speed * motorDirection);
 
     }
+
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         pivotSubsystem.setMotorSpeed(0);
     }
 
     @Override
-    public boolean isFinished(){
-        if (pivotSubsystem.getLimitSwitch() && motorDirection == -1){
+    public boolean isFinished() {
+        if (pivotSubsystem.getLimitSwitch() && motorDirection == -1) {
             return true;
         }
-        if (endPosition == 0){
-            if (pivotSubsystem.getLimitSwitch()){
-                return true;
-            }
+        if (endPosition == 0) {
+            return pivotSubsystem.getLimitSwitch();
         } else {
-            if (pivotSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1){
+            if (pivotSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
                 return true;
             }
-            if (pivotSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1){
-                return true;
-            }
+            return pivotSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
         }
-        return false;
     }
 }
