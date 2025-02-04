@@ -20,28 +20,14 @@ public class ElevatorCommandAutomatic extends Command {
 
     @Override
     public void initialize() {
-        switch (elevatorPosition) {
-            case l2:
-                endPosition = Constants.Elevator.l2Position;
-                break;
-
-            case l3:
-                endPosition = Constants.Elevator.l3Position;
-                break;
-
-            case l4:
-                endPosition = Constants.Elevator.l4Position;
-                break;
-            case algae1:
-                endPosition = Constants.Elevator.algae1Position;
-                break;
-
-            case algae2:
-                endPosition = Constants.Elevator.algae2Position;
-            default:
-                endPosition = 0;
-                break;
-        }
+        endPosition = switch (elevatorPosition) {
+            case l2 -> Constants.Elevator.l2Position;
+            case l3 -> Constants.Elevator.l3Position;
+            case l4 -> Constants.Elevator.l4Position;
+            case algae1 -> Constants.Elevator.algae1Position;
+            case algae2 -> Constants.Elevator.algae2Position;
+            default -> 0;
+        };
 
         if (elevatorSubsystem.getEncoderPosition() > endPosition) {
             motorDirection = -1;
