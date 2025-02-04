@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 public class ExtenderCommandManual extends Command {
     private final ExtenderSubsystem extenderSubsystem;
 
-    private double speed;
+    private final double speed;
 
     public ExtenderCommandManual(ExtenderSubsystem extenderSubsystem, double speed) {
         this.extenderSubsystem = extenderSubsystem;

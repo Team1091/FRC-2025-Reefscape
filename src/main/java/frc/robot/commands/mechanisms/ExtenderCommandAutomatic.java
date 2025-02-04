@@ -36,14 +36,9 @@ public class ExtenderCommandAutomatic extends Command {
     @Override
     public boolean isFinished() {
         if (isOut) {
-            if (extenderSubsystem.getEncoderPosition() >= Constants.Extender.outPosition) {
-                return true;
-            }
+            return extenderSubsystem.getEncoderPosition() >= Constants.Extender.outPosition;
         } else {
-            if (extenderSubsystem.getLimitSwitch()) {
-                return true;
-            }
+            return extenderSubsystem.getLimitSwitch();
         }
-        return false;
     }
 }

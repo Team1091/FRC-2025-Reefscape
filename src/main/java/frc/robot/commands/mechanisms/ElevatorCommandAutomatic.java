@@ -53,17 +53,12 @@ public class ElevatorCommandAutomatic extends Command {
             return true;
         }
         if (endPosition == 0) {
-            if (elevatorSubsystem.getLimitSwitchBottom()) {
-                return true;
-            }
+            return elevatorSubsystem.getLimitSwitchBottom();
         } else {
             if (elevatorSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
                 return true;
             }
-            if (elevatorSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1) {
-                return true;
-            }
+            return elevatorSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
         }
-        return false;
     }
 }
