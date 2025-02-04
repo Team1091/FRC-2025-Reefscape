@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 public class EjectCommand extends Command {
     private final ChuteSubsystem chuteSubsystem;
 
-    private double speed;
+    private final double speed;
 
     public EjectCommand(ChuteSubsystem chuteSubsystem, double speed) {
         this.chuteSubsystem = chuteSubsystem;

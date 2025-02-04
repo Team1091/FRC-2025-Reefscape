@@ -7,7 +7,7 @@ import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
 public class IntakeCommandFront extends Command {
     private final IntakeSubsystemFront intakeSubsystemFront;
 
-    private double speed;
+    private final double speed;
 
     public IntakeCommandFront(IntakeSubsystemFront intakeSubsystemFront, double speed) {
         this.intakeSubsystemFront = intakeSubsystemFront;

@@ -16,10 +16,10 @@ public class Module {
     private final ModuleIO io;
     private final ModuleIO.ModuleIOInputs inputs = new ModuleIO.ModuleIOInputs();
     private final int index;
-    private GenericEntry realAngle;
-    private GenericEntry realVelocity;
-    private GenericEntry targetAngle;
-    private GenericEntry targetVelocity;
+    private final GenericEntry realAngle;
+    private final GenericEntry realVelocity;
+    private final GenericEntry targetAngle;
+    private final GenericEntry targetVelocity;
 
 
     private final SimpleMotorFeedforward driveFeedforward;
@@ -88,7 +88,7 @@ public class Module {
             turnRelativeOffset = inputs.turnAbsolutePosition.minus(inputs.turnPosition);
             DriverStation.reportError(
                     "Drive/Module"
-                            + Integer.toString(index)
+                            + index
                             + "/TurnROffset:    "
                             + turnRelativeOffset.getRadians()
                             + "   "

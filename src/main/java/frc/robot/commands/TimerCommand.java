@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class TimerCommand extends Command {
     private long currentTime = 0;
-    private long delayMilli;
+    private final long delayMilli;
 
     public TimerCommand(long delayMilli) {
         this.delayMilli = delayMilli;

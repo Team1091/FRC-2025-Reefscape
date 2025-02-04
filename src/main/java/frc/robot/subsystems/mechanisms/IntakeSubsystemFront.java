@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystemFront extends SubsystemBase {
-    private final SparkMax intakemotorFront = new SparkMax(Constants.Intake.frontMotorChannel, MotorType.kBrushless);
+    private final SparkMax intakeMotorFront = new SparkMax(Constants.Intake.frontMotorChannel, MotorType.kBrushless);
 
     private double speed;
 
@@ -16,6 +16,6 @@ public class IntakeSubsystemFront extends SubsystemBase {
 
     @Override
     public void periodic() {
-        intakemotorFront.set(speed);
+        intakeMotorFront.set(speed);
     }
 }

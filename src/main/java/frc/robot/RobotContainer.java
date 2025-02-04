@@ -67,7 +67,7 @@ import static frc.robot.Constants.Swerve.FRONT_RIGHT;
 
 public class RobotContainer {
 
-    private static RobotContainer m_robotContainer = new RobotContainer();
+    private static final RobotContainer m_robotContainer = new RobotContainer();
 
     // The robot's subsystems
     private final Drive drive;

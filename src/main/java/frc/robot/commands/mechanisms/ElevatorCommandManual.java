@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 public class ElevatorCommandManual extends Command {
     private final ElevatorSubsystem elevatorSubsystem;
 
-    private double speed;
+    private final double speed;
 
     public ElevatorCommandManual(ElevatorSubsystem elevatorSubsystem, double speed) {
         this.elevatorSubsystem = elevatorSubsystem;

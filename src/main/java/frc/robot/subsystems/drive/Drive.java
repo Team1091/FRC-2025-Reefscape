@@ -33,9 +33,9 @@ public class Drive extends SubsystemBase {
 
     private boolean isFieldOriented = true;
     private ChassisSpeeds chassisSpeeds;
-    private SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
+    private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
-    private StructArrayPublisher<SwerveModuleState> statePublisher;
+    private final StructArrayPublisher<SwerveModuleState> statePublisher;
 
     public Drive(
             GyroIO gyroIO,
@@ -232,9 +232,6 @@ public class Drive extends SubsystemBase {
 
     public boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-        }
-        return false;
+        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
 }

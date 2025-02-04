@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 public class LimitSwitchWaitCommand extends Command {
     private final ChuteSubsystem troughSubsystem;
 
-    private boolean on;
+    private final boolean on;
 
     public LimitSwitchWaitCommand(ChuteSubsystem troughSubsystem, boolean on) {
         this.troughSubsystem = troughSubsystem;

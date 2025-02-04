@@ -10,14 +10,14 @@ import frc.robot.Constants;
 public class ExtenderSubsystem extends SubsystemBase {
     private final SparkMax extenderMotor;
     private final RelativeEncoder extenderEncoder;
-    private final DigitalInput extenderlimitSwitch;
+    private final DigitalInput extenderLimitSwitch;
 
     private double speed;
 
     public ExtenderSubsystem() {
         this.extenderMotor = new SparkMax(Constants.Extender.motorChannel, MotorType.kBrushed);
         this.extenderEncoder = extenderMotor.getEncoder();
-        this.extenderlimitSwitch = new DigitalInput(Constants.Extender.limitSwitchChannel);
+        this.extenderLimitSwitch = new DigitalInput(Constants.Extender.limitSwitchChannel);
     }
 
     public void resetEncoder() {
@@ -29,7 +29,7 @@ public class ExtenderSubsystem extends SubsystemBase {
     }
 
     public boolean getLimitSwitch() {
-        return !extenderlimitSwitch.get();
+        return !extenderLimitSwitch.get();
     }
 
     public void setMotorSpeed(double speed) {

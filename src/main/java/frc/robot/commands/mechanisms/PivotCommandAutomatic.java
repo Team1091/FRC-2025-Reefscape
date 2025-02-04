@@ -8,7 +8,7 @@ import frc.robot.subsystems.mechanisms.PivotSubsystem;
 public class PivotCommandAutomatic extends Command {
     private final PivotSubsystem pivotSubsystem;
 
-    private PivotPosition pivotPosition;
+    private final PivotPosition pivotPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
 

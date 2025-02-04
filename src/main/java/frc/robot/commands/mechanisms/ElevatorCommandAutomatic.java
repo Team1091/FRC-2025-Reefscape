@@ -8,7 +8,7 @@ import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 public class ElevatorCommandAutomatic extends Command {
     private final ElevatorSubsystem elevatorSubsystem;
 
-    private ElevatorPosition elevatorPosition;
+    private final ElevatorPosition elevatorPosition;
     private double endPosition = 0;
     private int motorDirection = 1;
 

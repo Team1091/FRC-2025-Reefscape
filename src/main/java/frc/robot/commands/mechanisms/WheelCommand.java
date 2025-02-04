@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 public class WheelCommand extends Command {
     private final ChuteSubsystem chuteSubsystem;
 
-    private double speed;
+    private final double speed;
 
     public WheelCommand(ChuteSubsystem troughSubsystem, double speed) {
         this.chuteSubsystem = troughSubsystem;

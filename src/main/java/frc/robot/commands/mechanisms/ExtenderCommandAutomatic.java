@@ -7,7 +7,7 @@ import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 public class ExtenderCommandAutomatic extends Command {
     private final ExtenderSubsystem extenderSubsystem;
 
-    private boolean isOut;
+    private final boolean isOut;
     private int motorDirection = -1;
 
     public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, boolean isOut) {

@@ -55,8 +55,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final RelativeEncoder turnRelativeEncoder;
     private final CoreCANcoder cancoder;
 
-    private GenericEntry absoluteEncoderReading;
-    private String title;
+    private final GenericEntry absoluteEncoderReading;
+    private final String title;
 
 
     private final StatusSignal<Angle> turnAbsolutePosition;
@@ -65,8 +65,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     private final double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
     private final double TURN_GEAR_RATIO = 150.0 / 7.0;
 
-    private boolean isTurnMotorInverted = true;
-    private boolean isDriveMotorInverted = false;
+    private final boolean isTurnMotorInverted = true;
+    private final boolean isDriveMotorInverted = false;
     private final Rotation2d absoluteEncoderOffset;
 
     public ModuleIOTalonFX(int index) {

@@ -18,7 +18,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     private final Supplier<Rotation2d> rotationSupplier;
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
-    private Field2d field = new Field2d();
+    private final Field2d field = new Field2d();
 
     public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
         this.rotationSupplier = rotationSupplier;
@@ -78,9 +78,6 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     public boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-        }
-        return false;
+        return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
 }

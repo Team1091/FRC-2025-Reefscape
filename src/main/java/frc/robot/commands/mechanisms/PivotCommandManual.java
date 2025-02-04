@@ -6,7 +6,7 @@ import frc.robot.subsystems.mechanisms.PivotSubsystem;
 public class PivotCommandManual extends Command {
     private final PivotSubsystem pivotSubsystem;
 
-    private double speed;
+    private final double speed;
 
     public PivotCommandManual(PivotSubsystem pivotSubsystem, double speed) {
         this.pivotSubsystem = pivotSubsystem;
