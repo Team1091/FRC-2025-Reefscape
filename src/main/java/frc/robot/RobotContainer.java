@@ -188,8 +188,8 @@ public class RobotContainer {
 
         driver.leftTrigger().onTrue(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out));
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
-        driver.leftTrigger().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));
-        driver.leftBumper().onTrue(toChuteCommand());
+        driver.leftTrigger().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
+        driver.leftBumper().whileTrue(toChuteCommand());
 
         driver.back().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 
@@ -208,13 +208,13 @@ public class RobotContainer {
         secondDriver.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Pivot.speed));
         secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Pivot.speed));
 
-        secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));
-        secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.frontSpeed));
+        secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
+        secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
-        secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed));
-        secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.backSpeed));
+        secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
+        secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
 
-        secondDriver.povRight().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.backSpeed));
+        secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
     }
 
     public void robotEnabled() {
@@ -300,8 +300,8 @@ public class RobotContainer {
         return new SequentialCommandGroup(
                 new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in),
                 new ParallelRaceGroup(
-                        new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.frontSpeed),
-                        new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.frontSpeed),
+                        new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed),
+                        new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed),
                         new LimitSwitchWaitCommand(chuteSubsystem, true)
                 )
         );
@@ -311,8 +311,8 @@ public class RobotContainer {
         return new SequentialCommandGroup(
                 new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
                 new ParallelRaceGroup(
-                        new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.frontSpeed),
-                        new IntakeCommandBack(intakeSubsystemBack, -Constants.Intake.frontSpeed)
+                        new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed),
+                        new IntakeCommandBack(intakeSubsystemBack, -Constants.Intake.suckSpeed)
                 )
         );
     }

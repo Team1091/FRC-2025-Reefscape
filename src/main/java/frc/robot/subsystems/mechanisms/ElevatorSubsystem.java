@@ -17,7 +17,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private double speed;
 
     public ElevatorSubsystem() {
-        this.elevatorMotor = new SparkMax(Constants.Elevator.motorChannel, MotorType.kBrushed);
+        this.elevatorMotor = new SparkMax(Constants.Elevator.motorChannel, MotorType.kBrushless);
         this.elevatorEncoder = elevatorMotor.getEncoder();
         this.elevatorLimitSwitchTop = new DigitalInput(Constants.Elevator.limitSwitchChannelTop);
         this.elevatorLimitSwitchBottom = new DigitalInput(Constants.Elevator.limitSwitchChannelBottom);
@@ -40,7 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setMotorSpeed(double speed) {
-        this.speed = speed;
+        this.speed = -speed;
     }
 
     //the periodic method always runs over and over when robot is enabled

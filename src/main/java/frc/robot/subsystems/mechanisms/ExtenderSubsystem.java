@@ -15,7 +15,7 @@ public class ExtenderSubsystem extends SubsystemBase {
     private double speed;
 
     public ExtenderSubsystem() {
-        this.extenderMotor = new SparkMax(Constants.Extender.motorChannel, MotorType.kBrushed);
+        this.extenderMotor = new SparkMax(Constants.Extender.motorChannel, MotorType.kBrushless);
         this.extenderEncoder = extenderMotor.getEncoder();
         this.extenderLimitSwitch = new DigitalInput(Constants.Extender.limitSwitchChannel);
     }
