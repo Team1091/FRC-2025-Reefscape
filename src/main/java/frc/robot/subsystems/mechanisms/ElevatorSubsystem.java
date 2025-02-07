@@ -40,7 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setMotorSpeed(double speed) {
-        this.speed = -speed;
+        this.speed = speed;
     }
 
     //the periodic method always runs over and over when robot is enabled
