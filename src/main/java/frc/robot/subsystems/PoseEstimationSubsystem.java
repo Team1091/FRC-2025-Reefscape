@@ -40,14 +40,10 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
 
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        try {
-            if (limelightMeasurement.tagCount > 0) {
-                poseEstimator.addVisionMeasurement(
-                        limelightMeasurement.pose,
-                        limelightMeasurement.timestampSeconds);
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
+        if (limelightMeasurement.tagCount > 0) {
+            poseEstimator.addVisionMeasurement(
+                    limelightMeasurement.pose,
+                    limelightMeasurement.timestampSeconds);
         }
 
         field.setRobotPose(getCurrentPose());

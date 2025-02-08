@@ -8,10 +8,10 @@ public class WheelCommand extends Command {
 
     private final double speed;
 
-    public WheelCommand(ChuteSubsystem troughSubsystem, double speed) {
-        this.chuteSubsystem = troughSubsystem;
+    public WheelCommand(ChuteSubsystem chuteSubsystem, double speed) {
+        this.chuteSubsystem = chuteSubsystem;
         this.speed = speed;
-        addRequirements(troughSubsystem);
+        addRequirements(chuteSubsystem);
     }
 
     @Override
