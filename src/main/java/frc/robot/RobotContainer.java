@@ -33,7 +33,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.TimerCommand;
 import frc.robot.commands.mechanisms.ClimberCommand;
-import frc.robot.commands.mechanisms.EjectCommand;
 import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
@@ -134,7 +133,6 @@ public class RobotContainer {
 
         configureAutonomous();
         configureButtonBindings();
-        robotEnabled();
     }
 
     public static RobotContainer getInstance() {
@@ -190,15 +188,15 @@ public class RobotContainer {
         driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
         driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
 
-        driver.leftTrigger().onTrue(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out));
+        driver.leftTrigger().whileTrue(pickupCommand());
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
-        driver.leftTrigger().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
         driver.leftBumper().whileTrue(toChuteCommand());
 
-        driver.back().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        driver.rightStick().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, Constants.Chute.holdSpeed));
 
-        driver.rightStick().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
-        driver.leftStick().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
+        driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
+        driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
 
         //Second Driver
         secondDriver.povUp().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l4)));
@@ -269,10 +267,20 @@ public class RobotContainer {
         }
     }
 
+    public Command pickupCommand() {
+        return new SequentialCommandGroup(
+            new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
+            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
+        );
+    }
+
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                new EjectCommand(chuteSubsystem, Constants.Chute.shootSpeed),
+                new ParallelRaceGroup(
+                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed),
+                    new LimitSwitchWaitCommand(chuteSubsystem, false)
+                ),
                 new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
         );
     }
