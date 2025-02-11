@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.TimerCommand;
 import frc.robot.commands.mechanisms.ClimberCommand;
+import frc.robot.commands.mechanisms.EjectCommand;
 import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
@@ -193,7 +194,7 @@ public class RobotContainer {
         driver.leftBumper().whileTrue(toChuteCommand());
 
         driver.rightStick().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
-        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, Constants.Chute.holdSpeed));
+        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
 
         driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
@@ -277,10 +278,7 @@ public class RobotContainer {
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                new ParallelRaceGroup(
-                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed),
-                    new LimitSwitchWaitCommand(chuteSubsystem, false)
-                ),
+                new EjectCommand(chuteSubsystem, Constants.Chute.shootSpeed),
                 new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
         );
     }
