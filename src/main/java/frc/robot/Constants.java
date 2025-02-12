@@ -66,11 +66,11 @@ public final class Constants {
         public static final int limitSwitchChannelTop = 0;
         public static final int limitSwitchChannelBottom = 1;
         public static final double speed = .5;
-        public static final double l2Position = 160;
-        public static final double l3Position = 220;
-        public static final double l4Position = 280;
-        public static final double algae1Position = 190;
-        public static final double algae2Position = 250;
+        public static final double l2Position = 250;
+        public static final double l3Position = 370;
+        public static final double l4Position = 540;
+        public static final double algae1Position = 250;
+        public static final double algae2Position = 370;
     }
 
     public static final class Extender {
