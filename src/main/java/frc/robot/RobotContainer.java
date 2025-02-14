@@ -233,20 +233,21 @@ public class RobotContainer {
 
     public void setScoreLevel(ElevatorPosition scoreLevel) {
         this.scoreLevel = scoreLevel;
-        SmartDashboard.putString("Score Level", scoreLevel.toString());
+        SmartDashboard.putString("Score Level", this.scoreLevel.toString());
     }
 
     public void setReefPosition(String reefPosition) {
         this.reefPosition = reefPosition;
-        SmartDashboard.putString("Reef Position", reefPosition);
+        SmartDashboard.putString("Reef Position", this.reefPosition);
     }
 
     public Command driveToReefCommand() {
         int reefSide = waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
-        PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
         try {
-            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
+            
+            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("1 " + reefPosition), constraints);
         } catch (FileVersionException | IOException | ParseException e) {
             e.printStackTrace();
             return new SequentialCommandGroup();
@@ -258,7 +259,7 @@ public class RobotContainer {
         if (drive.isOnRed()) {
             name = (poseEstimationSubsystem.getCurrentPose().getY() < 4) ? "Left Coral" : "Right Coral";
         }
-        PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(name), constraints);
