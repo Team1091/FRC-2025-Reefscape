@@ -68,16 +68,16 @@ public final class Constants {
         public static final double speed = .5;
         public static final double l2Position = 250;
         public static final double l3Position = 370;
-        public static final double l4Position = 540;
+        public static final double l4Position = 538;
         public static final double algae1Position = 250;
         public static final double algae2Position = 370;
     }
 
     public static final class Extender {
         public static final int motorChannel = 11;
-        public static final int limitSwitchChannel = 4;
+        public static final int limitSwitchChannel = 3;
         public static final double speed = 0.5;
-        public static final double outPosition = 0;
+        public static final double outPosition = 6;
     }
 
     public static final class Climber {

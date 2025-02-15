@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -91,6 +92,7 @@ public class RobotContainer {
 
     // Vars
     private ElevatorPosition scoreLevel = ElevatorPosition.l4;
+    private String reefPosition = "right";
     private final List<Translation2d> waypoints = List.of(
             new Translation2d(3, 4),
             new Translation2d(3.75, 2.742),
@@ -105,7 +107,6 @@ public class RobotContainer {
             new Translation2d(12.5, 2.742),
             new Translation2d(13.969, 2.742)
     );
-    private String reefPosition = "right";
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -176,7 +177,7 @@ public class RobotContainer {
 
         //Mechanisms
         //Main Driver
-        driver.rightTrigger().whileTrue(scoreCommand(scoreLevel));
+        driver.rightTrigger().whileTrue(scoreCommand());
         driver.rightBumper().whileTrue(scoreTroughCommand());
         driver.rightBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
 
@@ -193,8 +194,8 @@ public class RobotContainer {
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
         driver.leftBumper().whileTrue(toChuteCommand());
 
-        driver.rightStick().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
-        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
+        driver.rightStick().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.shootSpeed));
+        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 
         driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
@@ -233,7 +234,7 @@ public class RobotContainer {
 
     public void setScoreLevel(ElevatorPosition scoreLevel) {
         this.scoreLevel = scoreLevel;
-        SmartDashboard.putString("Score Level", this.scoreLevel.toString());
+        SmartDashboard.putString(" 1", this.scoreLevel.toString());
     }
 
     public void setReefPosition(String reefPosition) {
@@ -276,10 +277,28 @@ public class RobotContainer {
         );
     }
 
+    public Command scoreCommand() {
+        return new SequentialCommandGroup(
+                new ElevatorCommandAutomatic(elevatorSubsystem, scoreLevel),
+                new ExtenderCommandAutomatic(extenderSubsystem, true),
+                new ParallelDeadlineGroup(
+                    new TimerCommand(1200),
+                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
+                ),
+                new ExtenderCommandAutomatic(extenderSubsystem, false),
+                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
+        );
+    }
+
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                new EjectCommand(chuteSubsystem, Constants.Chute.shootSpeed),
+                new ExtenderCommandAutomatic(extenderSubsystem, true),
+                new ParallelDeadlineGroup(
+                    new TimerCommand(1200),
+                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
+                ),
+                new ExtenderCommandAutomatic(extenderSubsystem, false),
                 new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
         );
     }
