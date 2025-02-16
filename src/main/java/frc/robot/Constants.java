@@ -64,8 +64,8 @@ public final class Constants {
     public static final class Elevator {
         public static final int motorChannel = 13;
         public static final int limitSwitchChannelTop = 0;
-        public static final int limitSwitchChannelBottom = 1;
-        public static final double speed = .5;
+        public static final int limitSwitchChannelBottom = 4;
+        public static final double speed = 1;
         public static final double l2Position = 250;
         public static final double l3Position = 370;
         public static final double l4Position = 538;

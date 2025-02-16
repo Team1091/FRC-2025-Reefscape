@@ -106,7 +106,7 @@ public class Drive extends SubsystemBase {
 
         int invert = 1;
 
-        if (isOnRed()) {
+        if (isOnRed() && isFieldOriented) {
             invert = -1;
         }
 

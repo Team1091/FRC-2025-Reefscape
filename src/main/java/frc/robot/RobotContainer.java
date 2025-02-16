@@ -225,16 +225,15 @@ public class RobotContainer {
     }
 
     public void robotEnabled() {
-        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-        drive.straightenWheels();
-        drive.resetGyro();
+        //poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+        //drive.straightenWheels();
+        //drive.resetGyro();
         drive.setFieldState(true);
-        FollowPathCommand.warmupCommand().schedule();
     }
 
     public void setScoreLevel(ElevatorPosition scoreLevel) {
         this.scoreLevel = scoreLevel;
-        SmartDashboard.putString(" 1", this.scoreLevel.toString());
+        SmartDashboard.putString("Score Level", this.scoreLevel.toString());
     }
 
     public void setReefPosition(String reefPosition) {
@@ -248,7 +247,7 @@ public class RobotContainer {
 
         try {
             
-            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile("1 " + reefPosition), constraints);
+            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
         } catch (FileVersionException | IOException | ParseException e) {
             e.printStackTrace();
             return new SequentialCommandGroup();
