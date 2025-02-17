@@ -225,6 +225,7 @@ public class RobotContainer {
     }
 
     public void robotEnabled() {
+        // TODO: here?
         //poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
         //drive.straightenWheels();
         //drive.resetGyro();
@@ -351,5 +352,14 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
+    }
+
+    public void robotInit() {
+        // Set the defaults when powered on
+        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+        drive.straightenWheels();
+        drive.resetGyro();
+
+        FollowPathCommand.warmupCommand().schedule();
     }
 }
