@@ -183,9 +183,9 @@ public class RobotContainer {
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
 
         //Second Driver
-        secondDriver.povUp().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l4)));
-        secondDriver.povLeft().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l3)));
-        secondDriver.povDown().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l2)));
+        secondDriver.povUp().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4, elevatorSubsystem));
+        secondDriver.povLeft().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3, elevatorSubsystem));
+        secondDriver.povDown().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2, elevatorSubsystem));
 
         secondDriver.x().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft, poseEstimationSubsystem));
         secondDriver.a().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae, poseEstimationSubsystem));
