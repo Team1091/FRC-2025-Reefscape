@@ -218,17 +218,14 @@ public class RobotContainer {
         secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
         secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
-        secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
-        secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
+        //secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
+        //secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
+        secondDriver.y().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l3)));
 
         secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
     }
 
     public void robotEnabled() {
-        // TODO: here?
-        //poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-        //drive.straightenWheels();
-        //drive.resetGyro();
         drive.setFieldState(true);
     }
 
