@@ -26,6 +26,7 @@ public class ElevatorCommandAutomatic extends Command {
             case l4 -> Constants.Elevator.l4Position;
             case algae1 -> Constants.Elevator.algae1Position;
             case algae2 -> Constants.Elevator.algae2Position;
+            case selected -> elevatorSubsystem.getSelectedLevel();
             default -> 0;
         };
 

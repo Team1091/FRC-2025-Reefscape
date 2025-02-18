@@ -90,24 +90,6 @@ public class RobotContainer {
     // A chooser for autonomous commands
     private SendableChooser<Command> autoChooser;
 
-    // Vars
-    private ElevatorPosition scoreLevel = ElevatorPosition.l4;
-    private String reefPosition = "right";
-    private final List<Translation2d> waypoints = List.of(
-            new Translation2d(3, 4),
-            new Translation2d(3.75, 2.742),
-            new Translation2d(5.219, 2.742),
-            new Translation2d(5.956, 4),
-            new Translation2d(5.219, 5.316),
-            new Translation2d(3.75, 5.316),
-            new Translation2d(14.719, 4),
-            new Translation2d(13.969, 5.316),
-            new Translation2d(12.5, 5.316),
-            new Translation2d(11.75, 4),
-            new Translation2d(12.5, 2.742),
-            new Translation2d(13.969, 2.742)
-    );
-
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
      */
@@ -156,9 +138,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         //Drive
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
-        driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().onTrue(driveToReefCommand());
-        driver.povDown().onTrue(driveToCoralStationCommand());
+        driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented, drive));
+        driver.povRight().toggleOnTrue(poseEstimationSubsystem.driveToReefCommand());
+        driver.povDown().toggleOnTrue(poseEstimationSubsystem.driveToCoralStationCommand());
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
@@ -177,15 +159,15 @@ public class RobotContainer {
 
         //Mechanisms
         //Main Driver
-        driver.rightTrigger().whileTrue(scoreCommand());
+        driver.rightTrigger().toggleOnTrue(scoreCommand(ElevatorPosition.selected));
         driver.rightBumper().whileTrue(scoreTroughCommand());
         driver.rightBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
 
 
-        driver.a().whileTrue(dealgaeCommand(ElevatorPosition.algae1));
-        driver.a().onFalse(returnDealgaeCommand());
-        driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
-        driver.x().onFalse(returnDealgaeCommand());
+        driver.a().toggleOnTrue(dealgaeCommand(ElevatorPosition.algae1));
+        driver.a().toggleOnFalse(returnDealgaeCommand());
+        driver.x().toggleOnTrue(dealgaeCommand(ElevatorPosition.algae2));
+        driver.x().toggleOnFalse(returnDealgaeCommand());
 
         driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
         driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
@@ -205,9 +187,9 @@ public class RobotContainer {
         secondDriver.povLeft().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l3)));
         secondDriver.povDown().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l2)));
 
-        secondDriver.x().onTrue(Commands.runOnce(() -> setReefPosition("left")));
-        secondDriver.a().onTrue(Commands.runOnce(() -> setReefPosition("algae")));
-        secondDriver.b().onTrue(Commands.runOnce(() -> setReefPosition("right")));
+        secondDriver.x().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft, poseEstimationSubsystem));
+        secondDriver.a().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae, poseEstimationSubsystem));
+        secondDriver.b().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight, poseEstimationSubsystem));
 
         secondDriver.leftTrigger().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
         secondDriver.leftBumper().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
@@ -218,53 +200,14 @@ public class RobotContainer {
         secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
         secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
-        //secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
-        //secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
-        secondDriver.y().onTrue(Commands.runOnce(() -> setScoreLevel(ElevatorPosition.l3)));
+        secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
+        secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
 
         secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
     }
 
     public void robotEnabled() {
         drive.setFieldState(true);
-    }
-
-    public void setScoreLevel(ElevatorPosition scoreLevel) {
-        this.scoreLevel = scoreLevel;
-        SmartDashboard.putString("Score Level", this.scoreLevel.toString());
-    }
-
-    public void setReefPosition(String reefPosition) {
-        this.reefPosition = reefPosition;
-        SmartDashboard.putString("Reef Position", this.reefPosition);
-    }
-
-    public Command driveToReefCommand() {
-        int reefSide = waypoints.indexOf(poseEstimationSubsystem.getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
-        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
-
-        try {
-            
-            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
-        } catch (FileVersionException | IOException | ParseException e) {
-            e.printStackTrace();
-            return new SequentialCommandGroup();
-        }
-    }
-
-    public Command driveToCoralStationCommand() {
-        String name = (poseEstimationSubsystem.getCurrentPose().getY() > 4) ? "Left Coral" : "Right Coral";
-        if (drive.isOnRed()) {
-            name = (poseEstimationSubsystem.getCurrentPose().getY() < 4) ? "Left Coral" : "Right Coral";
-        }
-        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
-
-        try {
-            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(name), constraints);
-        } catch (FileVersionException | IOException | ParseException e) {
-            e.printStackTrace();
-            return new SequentialCommandGroup();
-        }
     }
 
     public Command pickupCommand() {
@@ -274,25 +217,12 @@ public class RobotContainer {
         );
     }
 
-    public Command scoreCommand() {
-        return new SequentialCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, scoreLevel),
-                new ExtenderCommandAutomatic(extenderSubsystem, true),
-                new ParallelDeadlineGroup(
-                    new TimerCommand(1200),
-                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
-                ),
-                new ExtenderCommandAutomatic(extenderSubsystem, false),
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
-        );
-    }
-
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
                 new ExtenderCommandAutomatic(extenderSubsystem, true),
                 new ParallelDeadlineGroup(
-                    new TimerCommand(1200),
+                    new TimerCommand(1000),
                     new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
                 ),
                 new ExtenderCommandAutomatic(extenderSubsystem, false),

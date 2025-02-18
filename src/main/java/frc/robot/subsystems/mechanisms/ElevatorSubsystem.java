@@ -15,6 +15,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final DigitalInput elevatorLimitSwitchTop;
     private final DigitalInput elevatorLimitSwitchBottom;
 
+    private double selectedLevel = Constants.Elevator.l4Position;
     private double speed;
 
     public ElevatorSubsystem() {
@@ -40,8 +41,36 @@ public class ElevatorSubsystem extends SubsystemBase {
         return !elevatorLimitSwitchBottom.get();
     }
 
+    public double getSelectedLevel(){
+        return selectedLevel;
+    }
+
     public void setMotorSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public void setScoreLevelL4(){
+        setScoreLevel(ElevatorPosition.l4);
+    }
+
+    public void setScoreLevelL3(){
+        setScoreLevel(ElevatorPosition.l3);
+    }
+
+    public void setScoreLevelL2(){
+        setScoreLevel(ElevatorPosition.l2);
+    }
+
+    public void setScoreLevel(ElevatorPosition scoreLevel) {
+        selectedLevel = switch (scoreLevel) {
+            case l2 -> Constants.Elevator.l2Position;
+            case l3 -> Constants.Elevator.l3Position;
+            case l4 -> Constants.Elevator.l4Position;
+            case algae1 -> Constants.Elevator.algae1Position;
+            case algae2 -> Constants.Elevator.algae2Position;
+            default -> 0;
+        };
+        SmartDashboard.putString("Score Level", scoreLevel.toString());
     }
 
     //the periodic method always runs over and over when robot is enabled

@@ -20,6 +20,21 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
 
     private final Field2d field = new Field2d();
+    private String reefPosition = "right";
+    private final List<Translation2d> waypoints = List.of(
+            new Translation2d(3, 4),
+            new Translation2d(3.75, 2.742),
+            new Translation2d(5.219, 2.742),
+            new Translation2d(5.956, 4),
+            new Translation2d(5.219, 5.316),
+            new Translation2d(3.75, 5.316),
+            new Translation2d(14.719, 4),
+            new Translation2d(13.969, 5.316),
+            new Translation2d(12.5, 5.316),
+            new Translation2d(11.75, 4),
+            new Translation2d(12.5, 2.742),
+            new Translation2d(13.969, 2.742)
+    );
 
     public PoseEstimationSubsystem(Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
         this.rotationSupplier = rotationSupplier;
@@ -82,5 +97,50 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     public boolean isOnRed() {
         var alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+    }
+
+    public void setReefPositionLeft(){
+        setReefPosition("left");
+    }
+
+    public void setReefPositionAlgae(){
+        setReefPosition("algae");
+    }
+
+    public void setReefPositionRight(){
+        setReefPosition("right");
+    }
+
+    public void setReefPosition(String reefPosition) {
+        this.reefPosition = reefPosition;
+        SmartDashboard.putString("Reef Position", this.reefPosition);
+    }
+
+    public Command driveToReefCommand() {
+        int reefSide = waypoints.indexOf(getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
+
+        try {
+            
+            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
+        } catch (FileVersionException | IOException | ParseException e) {
+            e.printStackTrace();
+            return new SequentialCommandGroup();
+        }
+    }
+
+    public Command driveToCoralStationCommand() {
+        String name = (getCurrentPose().getY() > 4) ? "Left Coral" : "Right Coral";
+        if (drive.isOnRed()) {
+            name = (getCurrentPose().getY() < 4) ? "Left Coral" : "Right Coral";
+        }
+        PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
+
+        try {
+            return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(name), constraints);
+        } catch (FileVersionException | IOException | ParseException e) {
+            e.printStackTrace();
+            return new SequentialCommandGroup();
+        }
     }
 }
