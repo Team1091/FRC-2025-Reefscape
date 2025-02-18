@@ -3,16 +3,28 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.struct.parser.ParseException;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.function.Supplier;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 
 public class PoseEstimationSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -123,7 +135,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         try {
             
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
-        } catch (FileVersionException | IOException | ParseException e) {
+        } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
             e.printStackTrace();
             return new SequentialCommandGroup();
         }
@@ -131,14 +143,14 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     public Command driveToCoralStationCommand() {
         String name = (getCurrentPose().getY() > 4) ? "Left Coral" : "Right Coral";
-        if (drive.isOnRed()) {
+        if (isOnRed()) {
             name = (getCurrentPose().getY() < 4) ? "Left Coral" : "Right Coral";
         }
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(name), constraints);
-        } catch (FileVersionException | IOException | ParseException e) {
+        } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
             e.printStackTrace();
             return new SequentialCommandGroup();
         }
