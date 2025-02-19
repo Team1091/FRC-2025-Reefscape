@@ -132,6 +132,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         int reefSide = waypoints.indexOf(getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
+        //TODO Relook at this
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
         } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
@@ -147,6 +148,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         }
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
+        //TODO Relook at this
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(name), constraints);
         } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
