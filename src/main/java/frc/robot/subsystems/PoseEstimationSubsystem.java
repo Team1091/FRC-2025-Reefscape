@@ -133,7 +133,6 @@ public class PoseEstimationSubsystem extends SubsystemBase {
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
         try {
-            
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(reefSide + " " + reefPosition), constraints);
         } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
             e.printStackTrace();
