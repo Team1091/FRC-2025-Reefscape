@@ -33,6 +33,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
     private final Field2d field = new Field2d();
     private String reefPosition = "right";
+    private int reefSide = 1;
     private final List<Translation2d> waypoints = List.of(
             new Translation2d(3, 4),
             new Translation2d(3.75, 2.742),
@@ -79,6 +80,9 @@ public class PoseEstimationSubsystem extends SubsystemBase {
             // TODO: handle exception
             DataLogManager.log(e.getMessage());
         }
+
+        reefSide = waypoints.indexOf(getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
+        SmartDashboard.putNumber("Reef Side", reefSide);
 
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);
@@ -129,7 +133,6 @@ public class PoseEstimationSubsystem extends SubsystemBase {
     }
 
     public Command driveToReefCommand() {
-        int reefSide = waypoints.indexOf(getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
         //TODO Relook at this

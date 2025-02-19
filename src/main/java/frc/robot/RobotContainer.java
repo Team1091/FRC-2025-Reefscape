@@ -59,6 +59,7 @@ import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
 import frc.robot.subsystems.mechanisms.PivotSubsystem;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.css.ElementCSSInlineStyle;
 
 import java.io.IOException;
 import java.util.List;
@@ -138,9 +139,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         //Drive
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
-        driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented, drive));
-        driver.povRight().toggleOnTrue(poseEstimationSubsystem.driveToReefCommand());
-        driver.povDown().toggleOnTrue(poseEstimationSubsystem.driveToCoralStationCommand());
+        driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
+        driver.povRight().onTrue(poseEstimationSubsystem.driveToReefCommand());
+        driver.povDown().onTrue(poseEstimationSubsystem.driveToCoralStationCommand());
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
@@ -159,15 +160,14 @@ public class RobotContainer {
 
         //Mechanisms
         //Main Driver
-        driver.rightTrigger().toggleOnTrue(scoreCommand(ElevatorPosition.selected));
+        driver.rightTrigger().whileTrue(scoreCommand(ElevatorPosition.selected));
         driver.rightBumper().whileTrue(scoreTroughCommand());
         driver.rightBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
 
-
-        driver.a().toggleOnTrue(dealgaeCommand(ElevatorPosition.algae1));
-        driver.a().toggleOnFalse(returnDealgaeCommand());
-        driver.x().toggleOnTrue(dealgaeCommand(ElevatorPosition.algae2));
-        driver.x().toggleOnFalse(returnDealgaeCommand());
+        driver.a().whileTrue(dealgaeCommand(ElevatorPosition.algae1));
+        driver.a().onFalse(returnDealgaeCommand());
+        driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
+        driver.x().onFalse(returnDealgaeCommand());
 
         driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
         driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
@@ -222,7 +222,7 @@ public class RobotContainer {
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
                 new ExtenderCommandAutomatic(extenderSubsystem, true),
                 new ParallelDeadlineGroup(
-                    new TimerCommand(1000),
+                    new TimerCommand(1200),
                     new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
                 ),
                 new ExtenderCommandAutomatic(extenderSubsystem, false),
