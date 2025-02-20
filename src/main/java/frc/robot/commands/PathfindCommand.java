@@ -17,6 +17,7 @@ public class PathfindCommand extends Command{
     private final PoseEstimationSubsystem poseEstimationSubsystem;
 
     private boolean toReef;
+    private Command driveTo = driveToReefCommand();
 
     public PathfindCommand(PoseEstimationSubsystem poseEstimationSubsystem, boolean toReef){
         this.poseEstimationSubsystem = poseEstimationSubsystem;
@@ -26,12 +27,18 @@ public class PathfindCommand extends Command{
     @Override
     public void initialize(){
         if(toReef){
-            driveToReefCommand().schedule();
+            driveTo = driveToReefCommand();
         } else {
-            driveToCoralStationCommand().schedule();
+            driveTo = driveToCoralStationCommand();
         }
+        driveTo.schedule();
     }
 
+    @Override
+    public void end(boolean interrupted) {
+        driveTo.cancel();
+    }
+    
     public Command driveToReefCommand() {
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
