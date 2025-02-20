@@ -15,13 +15,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,9 +28,9 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.PathfindCommand;
 import frc.robot.commands.TimerCommand;
 import frc.robot.commands.mechanisms.ClimberCommand;
-import frc.robot.commands.mechanisms.EjectCommand;
 import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
@@ -58,11 +54,6 @@ import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemBack;
 import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
 import frc.robot.subsystems.mechanisms.PivotSubsystem;
-import org.json.simple.parser.ParseException;
-import org.w3c.dom.css.ElementCSSInlineStyle;
-
-import java.io.IOException;
-import java.util.List;
 
 import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
@@ -140,8 +131,8 @@ public class RobotContainer {
         //Drive
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().onTrue(poseEstimationSubsystem.driveToReefCommand());
-        driver.povDown().onTrue(poseEstimationSubsystem.driveToCoralStationCommand());
+        driver.povRight().whileTrue(new PathfindCommand(poseEstimationSubsystem, true));
+        driver.povDown().whileTrue(new PathfindCommand(poseEstimationSubsystem, false));
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
