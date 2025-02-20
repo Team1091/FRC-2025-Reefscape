@@ -77,7 +77,8 @@ public final class Constants {
         public static final int motorChannel = 11;
         public static final int limitSwitchChannel = 3;
         public static final double speed = 0.5;
-        public static final double outPosition = 6;
+        public static final double algaePosition = 6;
+        public static final double scorePosition = 15;
     }
 
     public static final class Climber {

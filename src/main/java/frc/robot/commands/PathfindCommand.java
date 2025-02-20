@@ -35,7 +35,6 @@ public class PathfindCommand extends Command{
     public Command driveToReefCommand() {
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
-        //TODO Relook at this
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(poseEstimationSubsystem.getReefSide() + " " + poseEstimationSubsystem.getReefPosition()), constraints);
         } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {
@@ -47,7 +46,6 @@ public class PathfindCommand extends Command{
     public Command driveToCoralStationCommand() {
         PathConstraints constraints = new PathConstraints(1.0, 1.0, Units.degreesToRadians(120), Units.degreesToRadians(240));
 
-        //TODO Relook at this
         try {
             return AutoBuilder.pathfindThenFollowPath(PathPlannerPath.fromPathFile(poseEstimationSubsystem.getCoralStation()), constraints);
         } catch (FileVersionException | IOException | org.json.simple.parser.ParseException e) {

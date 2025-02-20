@@ -7,19 +7,26 @@ import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 public class ExtenderCommandAutomatic extends Command {
     private final ExtenderSubsystem extenderSubsystem;
 
-    private final boolean isOut;
-    private int motorDirection = -1;
+    private ExtenderPosition extenderPosition;
+    private double endPosition = 0;
+    private int motorDirection = 1;
 
-    public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, boolean isOut) {
+    public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, ExtenderPosition extenderPosition) {
         this.extenderSubsystem = extenderSubsystem;
-        this.isOut = isOut;
+        this.extenderPosition = extenderPosition;
         addRequirements(extenderSubsystem);
     }
 
     @Override
     public void initialize() {
-        if (isOut) {
-            motorDirection = 1;
+        endPosition = switch (extenderPosition) {
+            case score -> Constants.Extender.scorePosition;
+            case algae -> Constants.Extender.algaePosition;
+            default -> 0;
+        };
+
+        if (extenderSubsystem.getEncoderPosition() > endPosition) {
+            motorDirection = -1;
         }
     }
 
@@ -35,10 +42,16 @@ public class ExtenderCommandAutomatic extends Command {
 
     @Override
     public boolean isFinished() {
-        if (isOut) {
-            return extenderSubsystem.getEncoderPosition() >= Constants.Extender.outPosition;
-        } else {
+        if (extenderSubsystem.getLimitSwitch() && motorDirection == -1) {
+            return true;
+        }
+        if (endPosition == 0) {
             return extenderSubsystem.getLimitSwitch();
+        } else {
+            if (extenderSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
+                return true;
+            }
+            return extenderSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
         }
     }
 }

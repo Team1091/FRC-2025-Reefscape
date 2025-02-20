@@ -20,19 +20,11 @@ public class PivotCommandAutomatic extends Command {
 
     @Override
     public void initialize() {
-        switch (pivotPosition) {
-            case out:
-                endPosition = Constants.Pivot.outPosition;
-                break;
-
-            case score:
-                endPosition = Constants.Pivot.scorePosition;
-                break;
-
-            default:
-                endPosition = 0;
-                break;
-        }
+        endPosition = switch (pivotPosition) {
+            case score -> Constants.Pivot.scorePosition;
+            case out -> Constants.Pivot.outPosition;
+            default -> 0;
+        };
 
         if (pivotSubsystem.getEncoderPosition() > endPosition) {
             motorDirection = -1;

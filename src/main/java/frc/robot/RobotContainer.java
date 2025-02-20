@@ -115,7 +115,18 @@ public class RobotContainer {
         return m_robotContainer;
     }
 
+    public void robotInit() {
+        // Set the defaults when powered on
+        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+        drive.straightenWheels();
+        drive.resetGyro();
+        drive.setFieldState(true);
+
+        FollowPathCommand.warmupCommand().schedule();
+    }
+
     private void configureAutonomous() {
+        NamedCommands.registerCommand("Score Trough", scoreTroughCommand());
         NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
         NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
         NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
@@ -125,6 +136,10 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
     }
 
     private void configureButtonBindings() {
@@ -152,9 +167,8 @@ public class RobotContainer {
         //Mechanisms
         //Main Driver
         driver.rightTrigger().whileTrue(scoreCommand(ElevatorPosition.selected));
-        driver.rightBumper().whileTrue(scoreTroughCommand());
-        driver.rightBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
-
+        driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        
         driver.a().whileTrue(dealgaeCommand(ElevatorPosition.algae1));
         driver.a().onFalse(returnDealgaeCommand());
         driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
@@ -165,10 +179,8 @@ public class RobotContainer {
 
         driver.leftTrigger().whileTrue(pickupCommand());
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
-        driver.leftBumper().whileTrue(toChuteCommand());
-
-        driver.rightStick().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.shootSpeed));
-        driver.leftStick().toggleOnTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        driver.leftBumper().whileTrue(scoreTroughCommand());
+        driver.leftBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
 
         driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
@@ -191,20 +203,20 @@ public class RobotContainer {
         secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
         secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
-        secondDriver.y().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed));
-        secondDriver.y().whileTrue(new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed));
-
         secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
-    }
-
-    public void robotEnabled() {
-        drive.setFieldState(true);
     }
 
     public Command pickupCommand() {
         return new SequentialCommandGroup(
             new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
             new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
+        );
+    }
+
+    public Command scoreTroughCommand() {
+        return new SequentialCommandGroup(
+                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
+                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed),
         );
     }
 
@@ -245,39 +257,5 @@ public class RobotContainer {
                 returnDealgaeCommand()
         );
 
-    }
-
-    public Command toChuteCommand() {
-        return new SequentialCommandGroup(
-                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in),
-                new ParallelRaceGroup(
-                        new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.transferSpeed),
-                        new IntakeCommandBack(intakeSubsystemBack, Constants.Intake.transferSpeed),
-                        new LimitSwitchWaitCommand(chuteSubsystem, true)
-                )
-        );
-    }
-
-    public Command scoreTroughCommand() {
-        return new SequentialCommandGroup(
-                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
-                new ParallelRaceGroup(
-                        new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed),
-                        new IntakeCommandBack(intakeSubsystemBack, -Constants.Intake.suckSpeed)
-                )
-        );
-    }
-
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-    }
-
-    public void robotInit() {
-        // Set the defaults when powered on
-        poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-        drive.straightenWheels();
-        drive.resetGyro();
-
-        FollowPathCommand.warmupCommand().schedule();
     }
 }
