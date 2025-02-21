@@ -71,6 +71,7 @@ public final class Constants {
         public static final double l4Position = 538;
         public static final double algae1Position = 250;
         public static final double algae2Position = 370;
+        public static double retractPosition;
     }
 
     public static final class Extender {

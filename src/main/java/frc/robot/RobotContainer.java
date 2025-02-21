@@ -71,7 +71,6 @@ public class RobotContainer {
     private final ExtenderSubsystem extenderSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
     private final IntakeSubsystemFront intakeSubsystemFront;
-    private final IntakeSubsystemBack intakeSubsystemBack;
     private final PivotSubsystem pivotSubsystem;
     private final ChuteSubsystem chuteSubsystem;
     private final ClimberSubsystem climberSubsystem;
@@ -101,7 +100,6 @@ public class RobotContainer {
         extenderSubsystem = new ExtenderSubsystem();
         elevatorSubsystem = new ElevatorSubsystem();
         intakeSubsystemFront = new IntakeSubsystemFront();
-        intakeSubsystemBack = new IntakeSubsystemBack();
         pivotSubsystem = new PivotSubsystem();
         chuteSubsystem = new ChuteSubsystem();
         climberSubsystem = new ClimberSubsystem();
@@ -175,8 +173,8 @@ public class RobotContainer {
         driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
         driver.x().onFalse(returnDealgaeCommand());
 
-        driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
-        driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
+        driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, extenderSubsystem, Constants.Elevator.speed));
+        driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, extenderSubsystem, -Constants.Elevator.speed));
 
         driver.leftTrigger().whileTrue(pickupCommand());
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
@@ -223,20 +221,20 @@ public class RobotContainer {
 
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, level),
+                new ElevatorCommandAutomatic(elevatorSubsystem, extenderSubsystem, level),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.score),
                 new ParallelDeadlineGroup(
                     new TimerCommand(1200),
                     new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
                 ),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
+                new ElevatorCommandAutomatic(elevatorSubsystem, extenderSubsystem, ElevatorPosition.down)
         );
     }
 
     public Command dealgaeCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, level),
+                new ElevatorCommandAutomatic(elevatorSubsystem, extenderSubsystem, level),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.algae),
                 new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
         );
@@ -244,7 +242,7 @@ public class RobotContainer {
 
     public Command returnDealgaeCommand() {
         return new ParallelCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
+                new ElevatorCommandAutomatic(elevatorSubsystem, extenderSubsystem, ElevatorPosition.down),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in)
         );
     }
