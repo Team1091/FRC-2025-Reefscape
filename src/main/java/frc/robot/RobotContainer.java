@@ -117,6 +117,7 @@ public class RobotContainer {
         drive.straightenWheels();
         drive.resetGyro();
         drive.setFieldState(true);
+        climberSubsystem.resetEncoder();
 
         FollowPathCommand.warmupCommand().schedule();
     }

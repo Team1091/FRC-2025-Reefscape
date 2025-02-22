@@ -17,7 +17,11 @@ public class ClimberCommand extends Command {
 
     @Override
     public void execute() {
-        climberSubsystem.setSpeed(speed);
+        if (climberSubsystem.getEncoderPosition() <= 0 && speed < 0) {
+            climberSubsystem.setSpeed(0);
+        } else {
+            climberSubsystem.setSpeed(speed);
+        }
     }
 
     @Override
