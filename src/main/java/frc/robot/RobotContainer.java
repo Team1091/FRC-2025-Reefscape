@@ -197,8 +197,8 @@ public class RobotContainer {
         secondDriver.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, elevatorSubsystem, Constants.Extender.speed));
         secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, elevatorSubsystem, -Constants.Extender.speed));
 
-        secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
-        secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
+        secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed));
+        secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed));
 
         secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
     }
@@ -206,14 +206,14 @@ public class RobotContainer {
     public Command pickupCommand() {
         return new SequentialCommandGroup(
             new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
-            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
+            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed)
         );
     }
 
     public Command scoreTroughCommand() {
         return new SequentialCommandGroup(
                 new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
-                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed)
+                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed)
         );
     }
 

@@ -48,9 +48,7 @@ public final class Constants {
 
     public static final class Intake {
         public static final int frontMotorChannel = 16;
-        public static final int backMotorChannel = 15;
-        public static final double suckSpeed = .5;
-        public static final double transferSpeed = .15;
+        public static final double speed = .5;
     }
 
     public static final class Pivot {
