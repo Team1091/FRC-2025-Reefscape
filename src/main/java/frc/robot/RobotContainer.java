@@ -143,8 +143,8 @@ public class RobotContainer {
         //Drive
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, true));
-        driver.povDown().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, false));
+        // driver.povRight().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, true));
+        // driver.povDown().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, false));
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
