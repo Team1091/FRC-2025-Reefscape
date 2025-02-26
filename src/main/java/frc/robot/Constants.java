@@ -47,7 +47,7 @@ public final class Constants {
     }
 
     public static final class Intake {
-        public static final int frontMotorChannel = 16;
+        public static final int frontMotorChannel = 15;
         public static final double speed = .5;
     }
 
