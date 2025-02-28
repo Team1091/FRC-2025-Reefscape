@@ -40,7 +40,7 @@ public final class Constants {
     }
 
     public static final class Chute {
-        public static final int motorChannel = 12;
+        public static final int motorChannel = 11;
         public static final int limitSwitchChannel = 2;
         public static final double holdSpeed = 0.15;
         public static final double shootSpeed = 0.3;
@@ -73,7 +73,7 @@ public final class Constants {
     }
 
     public static final class Extender {
-        public static final int motorChannel = 11;
+        public static final int motorChannel = 12;
         public static final int limitSwitchChannel = 3;
         public static final double speed = 0.5;
         public static final double algaePosition = 6;

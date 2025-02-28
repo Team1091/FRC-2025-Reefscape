@@ -3,23 +3,19 @@ package frc.robot.commands.mechanisms;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.enums.ExtenderPosition;
-import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 
 public class ExtenderCommandAutomatic extends Command {
     private final ExtenderSubsystem extenderSubsystem;
 
     private ExtenderPosition extenderPosition;
-    private ElevatorSubsystem elevatorSubsystem;
     private double endPosition = 0;
     private int motorDirection = 1;
 
-    public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, ElevatorSubsystem elevatorSubsystem, ExtenderPosition extenderPosition) {
+    public ExtenderCommandAutomatic(ExtenderSubsystem extenderSubsystem, ExtenderPosition extenderPosition) {
         this.extenderSubsystem = extenderSubsystem;
-        this.elevatorSubsystem = elevatorSubsystem;
         this.extenderPosition = extenderPosition;
         addRequirements(extenderSubsystem);
-        addRequirements(elevatorSubsystem);
     }
 
     @Override
@@ -37,9 +33,7 @@ public class ExtenderCommandAutomatic extends Command {
 
     @Override
     public void execute() {
-        if(elevatorSubsystem.getEncoderPosition() > Constants.Elevator.retractPosition){
-            extenderSubsystem.setMotorSpeed(Constants.Extender.speed * motorDirection);
-        }
+        extenderSubsystem.setMotorSpeed(Constants.Extender.speed * motorDirection);
     }
 
     @Override
