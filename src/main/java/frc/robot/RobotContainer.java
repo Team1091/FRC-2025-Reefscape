@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -75,7 +76,6 @@ public class RobotContainer {
     // Joysticks
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController secondDriver = new CommandXboxController(1);
-    private final CommandXboxController buttonBoard = new CommandXboxController(2);
 
     // A chooser for autonomous commands
     private SendableChooser<Command> autoChooser;
@@ -118,7 +118,6 @@ public class RobotContainer {
         drive.straightenWheels();
         drive.resetGyro();
         drive.setFieldState(true);
-        climberSubsystem.resetEncoder();
 
         FollowPathCommand.warmupCommand().schedule();
     }
@@ -201,23 +200,7 @@ public class RobotContainer {
         secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed));
         secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed));
 
-        //Button Board
-        buttonBoard.leftStick().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4, elevatorSubsystem));
-        buttonBoard.x().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3, elevatorSubsystem));
-        buttonBoard.a().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2, elevatorSubsystem));
-
-        buttonBoard.b().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft, poseEstimationSubsystem));
-        buttonBoard.rightTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae, poseEstimationSubsystem));
-        buttonBoard.leftTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight, poseEstimationSubsystem));
-
-        buttonBoard.povRight().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
-        buttonBoard.povUp().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
-
-        buttonBoard.leftBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Extender.speed));
-        buttonBoard.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Extender.speed));
-
-        buttonBoard.povRight().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed));
-        buttonBoard.povDown().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed));
+        secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
     }
 
     public Command pickupCommand() {
@@ -256,9 +239,9 @@ public class RobotContainer {
     }
 
     public Command returnDealgaeCommand() {
-        return new SequentialCommandGroup(
-                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
+        return new ParallelCommandGroup(
+                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
+                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in)
         );
     }
 

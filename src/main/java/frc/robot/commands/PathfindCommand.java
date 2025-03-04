@@ -16,11 +16,12 @@ public class PathfindCommand extends Command{
     private final PoseEstimationSubsystem poseEstimationSubsystem;
 
     private boolean toReef;
-    private Command driveTo = driveToReefCommand();
+    private Command driveTo;
 
     public PathfindCommand(PoseEstimationSubsystem poseEstimationSubsystem, boolean toReef){
         this.poseEstimationSubsystem = poseEstimationSubsystem;
         this.toReef = toReef;
+        this.driveTo = driveToReefCommand();
     }
     
     @Override
@@ -30,6 +31,7 @@ public class PathfindCommand extends Command{
         } else {
             driveTo = driveToCoralStationCommand();
         }
+
         driveTo.schedule();
     }
 
