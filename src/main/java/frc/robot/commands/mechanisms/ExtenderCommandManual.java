@@ -1,6 +1,7 @@
 package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
 
 public class ExtenderCommandManual extends Command {
@@ -16,7 +17,7 @@ public class ExtenderCommandManual extends Command {
 
     @Override
     public void execute() {
-        if (speed < 0 && extenderSubsystem.getLimitSwitch()) {
+        if (speed < 0 && extenderSubsystem.getLimitSwitch() || speed > 0 && extenderSubsystem.getEncoderPosition() >= Constants.Extender.algaePosition) {
             extenderSubsystem.setMotorSpeed(0);
         } else {
             extenderSubsystem.setMotorSpeed(speed);

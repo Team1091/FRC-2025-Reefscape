@@ -76,6 +76,7 @@ public class RobotContainer {
     // Joysticks
     private final CommandXboxController driver = new CommandXboxController(0);
     private final CommandXboxController secondDriver = new CommandXboxController(1);
+    private final CommandXboxController buttonBoard = new CommandXboxController(2);
 
     // A chooser for autonomous commands
     private SendableChooser<Command> autoChooser;
@@ -140,7 +141,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //Drive
+        //Main Driver
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
         driver.povRight().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, true));
@@ -161,8 +162,6 @@ public class RobotContainer {
                 )
         );
 
-        //Mechanisms
-        //Main Driver
         driver.rightTrigger().whileTrue(scoreCommand(ElevatorPosition.selected));
         driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
         
@@ -182,38 +181,45 @@ public class RobotContainer {
         driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
 
+        //Button Board
+        buttonBoard.povRight().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
+        buttonBoard.povUp().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
+
+        buttonBoard.leftTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Extender.speed));
+        buttonBoard.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Extender.speed));
+
+        buttonBoard.povLeft().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
+        buttonBoard.povDown().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
+
+        buttonBoard.rightStick().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
+        buttonBoard.a().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
+
+        buttonBoard.leftStick().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
+        buttonBoard.x().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
+
+        buttonBoard.povRight().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+
         //Second Driver
-        secondDriver.povUp().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4, elevatorSubsystem));
-        secondDriver.povLeft().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3, elevatorSubsystem));
-        secondDriver.povDown().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2, elevatorSubsystem));
+        secondDriver.leftTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight));
+        secondDriver.povLeft().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae));
+        secondDriver.rightTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft));
 
-        secondDriver.x().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft, poseEstimationSubsystem));
-        secondDriver.a().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae, poseEstimationSubsystem));
-        secondDriver.b().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight, poseEstimationSubsystem));
-
-        secondDriver.leftTrigger().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
-        secondDriver.leftBumper().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
-
-        secondDriver.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Extender.speed));
-        secondDriver.rightBumper().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Extender.speed));
-
-        secondDriver.start().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed));
-        secondDriver.back().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed));
-
-        secondDriver.povRight().whileTrue(new WheelCommand(chuteSubsystem, -Constants.Chute.holdSpeed));
+        secondDriver.y().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4));
+        secondDriver.rightBumper().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3));
+        secondDriver.leftBumper().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2));
     }
 
     public Command pickupCommand() {
         return new SequentialCommandGroup(
             new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
-            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.speed)
+            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
         );
     }
 
     public Command scoreTroughCommand() {
         return new SequentialCommandGroup(
                 new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
-                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.speed)
+                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.shootSpeed)
         );
     }
 

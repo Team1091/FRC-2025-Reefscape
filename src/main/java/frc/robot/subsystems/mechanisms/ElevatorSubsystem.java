@@ -85,5 +85,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Elevator Encoder", getEncoderPosition());
+        SmartDashboard.putBoolean("Elevator Top Limit Switch", getLimitSwitchTop());
+        SmartDashboard.putBoolean("Elevator Bottom Limit Switch", getLimitSwitchBottom());
+
     }
 }

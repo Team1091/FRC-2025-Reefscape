@@ -54,7 +54,8 @@ public class PivotSubsystem extends SubsystemBase {
         if (getLimitSwitch()) {
             resetEncoder();
         }
-        SmartDashboard.putNumber("pivotEncoder", getEncoderPosition());
+        SmartDashboard.putNumber("Pivot Encoder", getEncoderPosition());
+        SmartDashboard.putBoolean("Pivot Limit Switch", getLimitSwitch());
     }
 }
 

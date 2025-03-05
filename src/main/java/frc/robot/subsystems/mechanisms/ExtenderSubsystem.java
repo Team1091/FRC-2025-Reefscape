@@ -48,5 +48,6 @@ public class ExtenderSubsystem extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Extender Encoder", getEncoderPosition());
+        SmartDashboard.putBoolean("Extender Limit Switch", getLimitSwitch());
     }
 }
