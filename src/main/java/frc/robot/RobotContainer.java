@@ -144,8 +144,8 @@ public class RobotContainer {
         //Main Driver
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, true));
-        driver.povDown().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, false));
+        driver.povRight().onTrue(new PathfindCommand(poseEstimationSubsystem, true));
+        driver.povDown().onTrue(new PathfindCommand(poseEstimationSubsystem, false));
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
@@ -197,16 +197,16 @@ public class RobotContainer {
         buttonBoard.leftStick().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
         buttonBoard.x().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
 
-        buttonBoard.povRight().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
+        buttonBoard.b().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 
         //Second Driver
-        secondDriver.leftTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight));
-        secondDriver.povLeft().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae));
-        secondDriver.rightTrigger().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft));
+        secondDriver.b().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight));
+        secondDriver.y().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae));
+        secondDriver.x().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionLeft));
 
-        secondDriver.y().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4));
-        secondDriver.rightBumper().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3));
-        secondDriver.leftBumper().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2));
+        secondDriver.povUp().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL4));
+        secondDriver.povLeft().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL3));
+        secondDriver.povDown().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2));
     }
 
     public Command pickupCommand() {
