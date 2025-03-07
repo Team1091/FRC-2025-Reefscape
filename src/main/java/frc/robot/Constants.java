@@ -65,11 +65,11 @@ public final class Constants {
         public static final int limitSwitchChannelTop = 0;
         public static final int limitSwitchChannelBottom = 4;
         public static final double speed = 1;
-        public static final double l2Position = 250;
-        public static final double l3Position = 370;
-        public static final double l4Position = 538;
-        public static final double algae1Position = 250;
-        public static final double algae2Position = 370;
+        public static final double l2Position = 136;
+        public static final double l3Position = 278;
+        public static final double l4Position = 476;
+        public static final double algae1Position = 45;
+        public static final double algae2Position = 210;
         public static final double retractPosition = 200;
     }
 
@@ -77,8 +77,8 @@ public final class Constants {
         public static final int motorChannel = 12;
         public static final int limitSwitchChannel = 2;
         public static final double speed = 0.5;
-        public static final double algaePosition = 19;
-        public static final double scorePosition = 5;
+        public static final double algaePosition = 20;
+        public static final double scorePosition = 0;
     }
 
     public static final class Climber {

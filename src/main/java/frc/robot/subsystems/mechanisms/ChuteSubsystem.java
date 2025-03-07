@@ -28,11 +28,7 @@ public class ChuteSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (getLimitSwitch() && speed == 0) {
-            outputMotor.set(Constants.Chute.holdSpeed);
-        } else {
-            outputMotor.set(speed);
-        }
+        outputMotor.set(speed);
         SmartDashboard.putBoolean("Chute Limit Switch", getLimitSwitch());
     }
 }

@@ -144,8 +144,8 @@ public class RobotContainer {
         //Main Driver
         driver.povUp().onTrue(Commands.runOnce(poseEstimationSubsystem::resetDriveRotation, poseEstimationSubsystem));
         driver.povLeft().onTrue(Commands.runOnce(drive::toggleIsFieldOriented));
-        driver.povRight().onTrue(new PathfindCommand(poseEstimationSubsystem, true));
-        driver.povDown().onTrue(new PathfindCommand(poseEstimationSubsystem, false));
+        driver.povRight().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, true));
+        driver.povDown().toggleOnTrue(new PathfindCommand(poseEstimationSubsystem, false));
 
         drive.setDefaultCommand(
                 DriveCommand.joystickDrive(
@@ -162,7 +162,7 @@ public class RobotContainer {
                 )
         );
 
-        driver.rightTrigger().whileTrue(scoreCommand(ElevatorPosition.selected));
+        driver.rightTrigger().toggleOnTrue(scoreCommand(ElevatorPosition.selected));
         driver.rightBumper().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
         
         driver.a().whileTrue(dealgaeCommand(ElevatorPosition.algae1));
@@ -226,28 +226,30 @@ public class RobotContainer {
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.score),
                 new ParallelDeadlineGroup(
-                    new TimerCommand(1200),
+                    new TimerCommand(500),
                     new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
                 ),
-                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
                 new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
         );
     }
 
     public Command dealgaeCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, level),
+                new ParallelCommandGroup(
+                    new ElevatorCommandAutomatic(elevatorSubsystem, level),
+                    new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score)
+                ),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.algae),
                 new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
         );
     }
 
     public Command returnDealgaeCommand() {
-        return new ParallelCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
-                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in)
+        return new SequentialCommandGroup(
+            new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
+            new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
+            new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in)
         );
     }
 
