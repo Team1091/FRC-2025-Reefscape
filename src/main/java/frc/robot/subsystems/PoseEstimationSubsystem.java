@@ -73,6 +73,7 @@ public class PoseEstimationSubsystem extends SubsystemBase {
 
         reefSide = waypoints.indexOf(getCurrentPose().getTranslation().nearest(waypoints)) % 6 + 1;
         SmartDashboard.putNumber("Reef Side", reefSide);
+        SmartDashboard.putString("Coral Station", getCoralStation());
 
         field.setRobotPose(getCurrentPose());
         SmartDashboard.putData("Field", field);

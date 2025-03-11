@@ -5,12 +5,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.mechanisms.ClimberSubsystem;
 
 
-public class ClimberCommand extends Command {
+public class ClimberOverrideCommand extends Command {
     private final ClimberSubsystem climberSubsystem;
 
     private final double speed;
 
-    public ClimberCommand(ClimberSubsystem climberSubsystem, double speed) {
+    public ClimberOverrideCommand(ClimberSubsystem climberSubsystem, double speed) {
         this.climberSubsystem = climberSubsystem;
         this.speed = speed;
         addRequirements(climberSubsystem);
@@ -18,11 +18,7 @@ public class ClimberCommand extends Command {
 
     @Override
     public void execute() {
-        if (climberSubsystem.getEncoderPosition() <= 0 && speed < 0 || climberSubsystem.getEncoderPosition() >= Constants.Climber.outMax && speed > 0 ) {
-            climberSubsystem.setSpeed(0);
-        } else {
-            climberSubsystem.setSpeed(speed);
-        }
+        climberSubsystem.setSpeed(speed);
     }
 
     @Override

@@ -31,6 +31,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.PathfindCommand;
 import frc.robot.commands.TimerCommand;
 import frc.robot.commands.mechanisms.ClimberCommand;
+import frc.robot.commands.mechanisms.ClimberOverrideCommand;
 import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
@@ -123,6 +124,10 @@ public class RobotContainer {
         FollowPathCommand.warmupCommand().schedule();
     }
 
+    public void robotEnabled() {
+        climberSubsystem.resetEncoder();
+    }
+
     private void configureAutonomous() {
         NamedCommands.registerCommand("Score Trough", scoreTroughCommand());
         NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
@@ -191,8 +196,8 @@ public class RobotContainer {
         buttonBoard.povLeft().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
         buttonBoard.povDown().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
-        buttonBoard.rightStick().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
-        buttonBoard.a().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
+        buttonBoard.rightStick().whileTrue(new ClimberOverrideCommand(climberSubsystem, Constants.Climber.speed));
+        buttonBoard.a().whileTrue(new ClimberOverrideCommand(climberSubsystem, -Constants.Climber.speed));
 
         buttonBoard.leftStick().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
         buttonBoard.x().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
