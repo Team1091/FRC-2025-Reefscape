@@ -20,7 +20,7 @@
         "y": 2.802133499105355
       },
       "prevControl": {
-        "x": 3.8029832006634847,
+        "x": 3.8029832006634843,
         "y": 2.9010621193707604
       },
       "nextControl": null,
@@ -48,7 +48,7 @@
   "folder": "Reef Waypoints",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 58.00000000000001
   },
   "useDefaultConstraints": true
 }

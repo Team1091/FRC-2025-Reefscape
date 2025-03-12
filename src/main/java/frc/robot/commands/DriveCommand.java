@@ -45,7 +45,9 @@ public class DriveCommand {
                                     .getTranslation();
 
                     // Convert to field relative speeds & send command
-                    drive.runVelocity(linearVelocity, omega);
+                    if (drive.canMove()){
+                        drive.runVelocity(linearVelocity, omega);
+                    }
                 },
                 drive);
     }

@@ -32,6 +32,7 @@ public class Drive extends SubsystemBase {
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
 
     private boolean isFieldOriented = true;
+    private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
@@ -234,4 +235,25 @@ public class Drive extends SubsystemBase {
         var alliance = DriverStation.getAlliance();
         return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
     }
+
+    public void toggleDefenseMode(){
+        defenseMode = !defenseMode;
+    }
+
+    public boolean canMove() {
+        Translation2d middle;
+        if(isOnRed()){
+            middle = new Translation2d(13.25, 4);
+        } else {
+            middle = new Translation2d(4.5, 4);
+        }
+        if (defenseMode && getPose().getTranslation().getDistance(middle) < 2){
+            return false;
+        }
+        return true;
+    }
+
+    //public Rotation2d headingToMiddle(){
+    //     getPose().getTranslation().getAngle
+    // }
 }

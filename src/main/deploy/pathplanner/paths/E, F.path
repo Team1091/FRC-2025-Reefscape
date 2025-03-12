@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.928912808285799,
-        "y": 2.8318690151227113
+        "x": 4.978502653256304,
+        "y": 2.7819582078265728
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.357964102841566,
-        "y": 3.074829866084061
+        "x": 5.4075539478120715,
+        "y": 3.0249190587879227
       },
       "isLocked": false,
       "linkedName": "E"
     },
     {
       "anchor": {
-        "x": 5.214587808285798,
-        "y": 2.99664401512271
+        "x": 5.311987557259301,
+        "y": 2.9831413368614945
       },
       "prevControl": {
-        "x": 4.997220875756456,
-        "y": 2.8731465793485835
+        "x": 5.094620624729959,
+        "y": 2.859643901087368
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Reef Waypoints",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 117.0
   },
   "useDefaultConstraints": true
 }

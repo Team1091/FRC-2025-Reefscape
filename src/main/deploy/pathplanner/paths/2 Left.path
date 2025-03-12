@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7173211108005177,
-        "y": 2.741944184206105
+        "x": 3.6587063393254193,
+        "y": 2.6568698423360217
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.634383694063593,
-        "y": 2.9777860483969345
+        "x": 3.6143751504861052,
+        "y": 2.902907940394215
       },
       "isLocked": false,
       "linkedName": "2"
     },
     {
       "anchor": {
-        "x": 3.6512414383561644,
-        "y": 2.9957405821917806
+        "x": 3.6526058233473306,
+        "y": 2.976130178522667
       },
       "prevControl": {
-        "x": 3.7527760548695257,
-        "y": 2.7672876950367162
+        "x": 3.650154960736974,
+        "y": 2.7261421922663964
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 58.00000000000001
   },
   "reversed": false,
   "folder": "Pathfinder To",
