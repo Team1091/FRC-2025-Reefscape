@@ -204,6 +204,8 @@ public class RobotContainer {
 
         buttonBoard.b().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 
+        buttonBoard.leftBumper().onTrue(Commands.runOnce(drive::toggleDefenseMode));
+
         //Second Driver
         secondDriver.b().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionRight));
         secondDriver.y().onTrue(Commands.runOnce(poseEstimationSubsystem::setReefPositionAlgae));

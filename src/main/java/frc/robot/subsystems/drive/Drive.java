@@ -34,6 +34,7 @@ public class Drive extends SubsystemBase {
     private boolean isFieldOriented = true;
     private boolean defenseMode = false;
     private ChassisSpeeds chassisSpeeds;
+    private Translation2d middle;
     private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
     private PoseEstimationSubsystem poseEstimationSubsystem;
     private final StructArrayPublisher<SwerveModuleState> statePublisher;
@@ -55,6 +56,12 @@ public class Drive extends SubsystemBase {
         }
 
         statePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("States", SwerveModuleState.struct).publish();
+
+        if(isOnRed()){
+            middle = new Translation2d(13.25, 4);
+        } else {
+            middle = new Translation2d(4.5, 4);
+        }
     }
 
     public void periodic() {
@@ -241,19 +248,13 @@ public class Drive extends SubsystemBase {
     }
 
     public boolean canMove() {
-        Translation2d middle;
-        if(isOnRed()){
-            middle = new Translation2d(13.25, 4);
-        } else {
-            middle = new Translation2d(4.5, 4);
-        }
         if (defenseMode && getPose().getTranslation().getDistance(middle) < 2){
             return false;
         }
         return true;
     }
 
-    //public Rotation2d headingToMiddle(){
-    //     getPose().getTranslation().getAngle
-    // }
+    public Rotation2d getHeadingToMiddle(){
+        return getPose().getTranslation().minus(middle).getAngle();
+    }
 }

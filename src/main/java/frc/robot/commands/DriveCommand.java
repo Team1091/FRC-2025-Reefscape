@@ -45,10 +45,11 @@ public class DriveCommand {
                                     .getTranslation();
 
                     // Convert to field relative speeds & send command
-                    if (drive.canMove()){
+                    if (drive.canMove() || Math.abs(linearDirection.getDegrees() - drive.getHeadingToMiddle().getDegrees()) < 90){
                         drive.runVelocity(linearVelocity, omega);
                     }
                 },
-                drive);
+                drive
+        );
     }
 }
