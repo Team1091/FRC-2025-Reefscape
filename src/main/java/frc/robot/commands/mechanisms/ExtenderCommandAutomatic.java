@@ -46,13 +46,14 @@ public class ExtenderCommandAutomatic extends Command {
         if (extenderSubsystem.getLimitSwitch() && motorDirection == -1) {
             return true;
         }
-        if (endPosition == 0) {
-            return extenderSubsystem.getLimitSwitch();
-        } else {
-            if (extenderSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
-                return true;
-            }
-            return extenderSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
+        if (extenderSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
+            return true;
         }
+        return extenderSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
+   
+        // if (endPosition == 0) {
+        //     return extenderSubsystem.getLimitSwitch();
+        // } else {
+        //      }
     }
 }

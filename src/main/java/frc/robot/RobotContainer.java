@@ -245,7 +245,7 @@ public class RobotContainer {
         return new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                    new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score)
+                    new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out)
                 ),
                 new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.algae),
                 new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
@@ -255,8 +255,10 @@ public class RobotContainer {
     public Command returnDealgaeCommand() {
         return new SequentialCommandGroup(
             new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
-            new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
-            new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in)
+            new ParallelCommandGroup(
+                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
+                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in)
+            )
         );
     }
 

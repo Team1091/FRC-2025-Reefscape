@@ -11,15 +11,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Reef to Right Coral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Coral to Reef"
+            "name": "Score L4"
           }
         }
       ]
