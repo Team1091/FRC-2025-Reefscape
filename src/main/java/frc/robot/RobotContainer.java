@@ -134,8 +134,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
         NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
         NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(chuteSubsystem, true));
-        NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 1000));
-        NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 1000));
+        NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 5000));
+        NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 5000));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -175,8 +175,8 @@ public class RobotContainer {
         driver.x().whileTrue(dealgaeCommand(ElevatorPosition.algae2));
         driver.x().onFalse(returnDealgaeCommand());
 
-        driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
-        driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
+        driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.upSpeed));
+        driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.downSpeed));
 
         driver.leftTrigger().whileTrue(pickupCommand());
         driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
@@ -189,6 +189,7 @@ public class RobotContainer {
         //Button Board
         buttonBoard.povRight().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
         buttonBoard.povUp().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
+        buttonBoard.povUp().toggleOnTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
 
         buttonBoard.leftTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Extender.speed));
         buttonBoard.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Extender.speed));
@@ -199,8 +200,8 @@ public class RobotContainer {
         buttonBoard.rightStick().whileTrue(new ClimberOverrideCommand(climberSubsystem, Constants.Climber.speed));
         buttonBoard.a().whileTrue(new ClimberOverrideCommand(climberSubsystem, -Constants.Climber.speed));
 
-        buttonBoard.leftStick().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.speed));
-        buttonBoard.x().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.speed));
+        buttonBoard.leftStick().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.upSpeed));
+        buttonBoard.x().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.downSpeed));
 
         buttonBoard.b().whileTrue(new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed));
 

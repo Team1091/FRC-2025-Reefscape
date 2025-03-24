@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.PoseEstimationSubsystem;
 
@@ -245,6 +246,7 @@ public class Drive extends SubsystemBase {
 
     public void toggleDefenseMode(){
         defenseMode = !defenseMode;
+        SmartDashboard.putBoolean("Defense Mode", defenseMode);
     }
 
     public boolean canMove() {

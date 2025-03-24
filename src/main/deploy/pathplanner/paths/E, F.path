@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.978502653256304,
-        "y": 2.7819582078265728
+        "x": 5.018205038746156,
+        "y": 2.8529379305474514
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.4075539478120715,
-        "y": 3.0249190587879227
+        "x": 5.447256333301923,
+        "y": 3.0958987815088013
       },
       "isLocked": false,
       "linkedName": "E"
     },
     {
       "anchor": {
-        "x": 5.311987557259301,
-        "y": 2.9831413368614945
+        "x": 5.301697610438106,
+        "y": 3.0068044084716017
       },
       "prevControl": {
-        "x": 5.094620624729959,
-        "y": 2.859643901087368
+        "x": 5.084330677908764,
+        "y": 2.883306972697475
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,10 +33,10 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 120.0,
-    "maxAngularAcceleration": 240.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 240.0,
+    "maxAngularAcceleration": 480.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -48,7 +48,7 @@
   "folder": "Reef Waypoints",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 117.0
+    "rotation": 119.50072462349915
   },
   "useDefaultConstraints": true
 }

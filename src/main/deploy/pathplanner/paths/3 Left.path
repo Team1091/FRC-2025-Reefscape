@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.978502653256304,
-        "y": 2.7819582078265728
+        "x": 5.018205038746156,
+        "y": 2.8529379305474514
       },
       "prevControl": {
-        "x": 5.2102974754061435,
-        "y": 2.6883037342306784
+        "x": 5.249999860895995,
+        "y": 2.759283456951557
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,16 +33,16 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 120.0,
-    "maxAngularAcceleration": 240.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 240.0,
+    "maxAngularAcceleration": 480.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 117.0
+    "rotation": 119.50072462349915
   },
   "reversed": false,
   "folder": "Pathfinder To",

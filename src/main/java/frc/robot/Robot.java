@@ -12,6 +12,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
@@ -45,6 +46,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit(){
         m_robotContainer.robotInit();
+        CameraServer.startAutomaticCapture().setExposureManual(40);
     }
 
     /**

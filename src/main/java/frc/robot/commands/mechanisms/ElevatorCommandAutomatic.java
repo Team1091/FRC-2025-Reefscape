@@ -37,7 +37,12 @@ public class ElevatorCommandAutomatic extends Command {
 
     @Override
     public void execute() {
-        elevatorSubsystem.setMotorSpeed(Constants.Elevator.speed * motorDirection);
+        if (motorDirection < 0){
+            elevatorSubsystem.setMotorSpeed(Constants.Elevator.downSpeed * motorDirection);
+        } else {
+            elevatorSubsystem.setMotorSpeed(Constants.Elevator.upSpeed * motorDirection);
+        }
+
     }
 
     @Override

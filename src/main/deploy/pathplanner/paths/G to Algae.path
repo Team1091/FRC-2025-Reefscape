@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.274730455528307,
-        "y": 5.029260524260399
+        "x": 5.589554794520548,
+        "y": 3.8522046232876708
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0182961340716,
-        "y": 5.163948518736223
+        "x": 5.791610715573179,
+        "y": 3.553931596971881
       },
       "isLocked": false,
-      "linkedName": "I"
+      "linkedName": "Auto"
     },
     {
       "anchor": {
-        "x": 4.941789884382067,
-        "y": 5.209174527883838
+        "x": 5.737258513639201,
+        "y": 3.9647596822220423
       },
       "prevControl": {
-        "x": 5.1637574732462515,
-        "y": 5.0941510976888535
+        "x": 6.46578947368421,
+        "y": 4.1597039473684205
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "J"
+      "linkedName": "Algae 4"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Reef Waypoints",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

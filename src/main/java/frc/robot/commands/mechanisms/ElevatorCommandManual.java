@@ -1,6 +1,7 @@
 package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 
 public class ElevatorCommandManual extends Command {
@@ -18,6 +19,8 @@ public class ElevatorCommandManual extends Command {
     public void execute() {
         if (speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getLimitSwitchBottom()){
             elevatorSubsystem.setMotorSpeed(0);
+        } else if (speed > 0 && elevatorSubsystem.getEncoderPosition() > Constants.Elevator.l4Position){
+            elevatorSubsystem.setMotorSpeed(.4);
         } else {
             elevatorSubsystem.setMotorSpeed(speed);
         }
