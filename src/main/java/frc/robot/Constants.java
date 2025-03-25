@@ -66,9 +66,9 @@ public final class Constants {
         public static final int limitSwitchChannelBottom = 4;
         public static final double downSpeed = .6;
         public static final double upSpeed = .8;
-        public static final double l2Position = 40;
-        public static final double l3Position = 70;
-        public static final double l4Position = 100;
+        public static final double l2Position = 32;
+        public static final double l3Position = 69;
+        public static final double l4Position = 121;
         public static final double algae1Position = 35;
         public static final double algae2Position = 190;
         public static final double retractPosition = 200;

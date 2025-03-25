@@ -235,7 +235,7 @@ public class RobotContainer {
         return new SequentialCommandGroup(
                 new ElevatorCommandAutomatic(elevatorSubsystem, level),
                 new ParallelDeadlineGroup(
-                    new TimerCommand(500),
+                    new TimerCommand(1000),
                     new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
                 ),
                 new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
