@@ -36,10 +36,7 @@ import frc.robot.commands.mechanisms.ElevatorCommandAutomatic;
 import frc.robot.commands.mechanisms.ElevatorCommandManual;
 import frc.robot.commands.mechanisms.ExtenderCommandAutomatic;
 import frc.robot.commands.mechanisms.ExtenderCommandManual;
-import frc.robot.commands.mechanisms.IntakeCommandFront;
 import frc.robot.commands.mechanisms.LimitSwitchWaitCommand;
-import frc.robot.commands.mechanisms.PivotCommandAutomatic;
-import frc.robot.commands.mechanisms.PivotCommandManual;
 import frc.robot.commands.mechanisms.WheelCommand;
 import frc.robot.enums.ElevatorPosition;
 import frc.robot.enums.ExtenderPosition;
@@ -52,8 +49,6 @@ import frc.robot.subsystems.mechanisms.ChuteSubsystem;
 import frc.robot.subsystems.mechanisms.ClimberSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 import frc.robot.subsystems.mechanisms.ExtenderSubsystem;
-import frc.robot.subsystems.mechanisms.IntakeSubsystemFront;
-import frc.robot.subsystems.mechanisms.PivotSubsystem;
 
 import static frc.robot.Constants.Swerve.BACK_LEFT;
 import static frc.robot.Constants.Swerve.BACK_RIGHT;
@@ -69,8 +64,8 @@ public class RobotContainer {
     private final PoseEstimationSubsystem poseEstimationSubsystem;
     private final ExtenderSubsystem extenderSubsystem;
     private final ElevatorSubsystem elevatorSubsystem;
-    private final IntakeSubsystemFront intakeSubsystemFront;
-    private final PivotSubsystem pivotSubsystem;
+    //private final IntakeSubsystemFront intakeSubsystemFront;
+    //private final PivotSubsystem pivotSubsystem;
     private final ChuteSubsystem chuteSubsystem;
     private final ClimberSubsystem climberSubsystem;
 
@@ -99,8 +94,8 @@ public class RobotContainer {
         );
         extenderSubsystem = new ExtenderSubsystem();
         elevatorSubsystem = new ElevatorSubsystem();
-        intakeSubsystemFront = new IntakeSubsystemFront();
-        pivotSubsystem = new PivotSubsystem();
+        //intakeSubsystemFront = new IntakeSubsystemFront();
+        //pivotSubsystem = new PivotSubsystem();
         chuteSubsystem = new ChuteSubsystem();
         climberSubsystem = new ClimberSubsystem();
 
@@ -129,13 +124,14 @@ public class RobotContainer {
     }
 
     private void configureAutonomous() {
-        NamedCommands.registerCommand("Score Trough", scoreTroughCommand());
+        //NamedCommands.registerCommand("Score Trough", scoreTroughCommand());
         NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
         NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
         NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
         NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(chuteSubsystem, true));
-        NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 5000));
-        NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 5000));
+        NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 1000));
+        NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 1000));
+        NamedCommands.registerCommand("Return Dealgae", returnDealgaeCommand());
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -178,24 +174,24 @@ public class RobotContainer {
         driver.y().whileTrue(new ElevatorCommandManual(elevatorSubsystem, Constants.Elevator.upSpeed));
         driver.b().whileTrue(new ElevatorCommandManual(elevatorSubsystem, -Constants.Elevator.downSpeed));
 
-        driver.leftTrigger().whileTrue(pickupCommand());
-        driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
-        driver.leftBumper().whileTrue(scoreTroughCommand());
-        driver.leftBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
+        // driver.leftTrigger().whileTrue(pickupCommand());
+        // driver.leftTrigger().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
+        // driver.leftBumper().whileTrue(scoreTroughCommand());
+        // driver.leftBumper().onFalse(new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in));
 
         driver.start().whileTrue(new ClimberCommand(climberSubsystem, Constants.Climber.speed));
         driver.back().whileTrue(new ClimberCommand(climberSubsystem, -Constants.Climber.speed));
 
         //Button Board
-        buttonBoard.povRight().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
-        buttonBoard.povUp().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
-        buttonBoard.povUp().toggleOnTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
+        // buttonBoard.povRight().whileTrue(new PivotCommandManual(pivotSubsystem, Constants.Pivot.speed));
+        // buttonBoard.povUp().whileTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
+        // buttonBoard.povUp().toggleOnTrue(new PivotCommandManual(pivotSubsystem, -Constants.Pivot.speed));
 
         buttonBoard.leftTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, Constants.Extender.speed));
         buttonBoard.rightTrigger().whileTrue(new ExtenderCommandManual(extenderSubsystem, -Constants.Extender.speed));
 
-        buttonBoard.povLeft().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
-        buttonBoard.povDown().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
+        // buttonBoard.povLeft().whileTrue(new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed));
+        // buttonBoard.povDown().whileTrue(new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.suckSpeed));
 
         buttonBoard.rightStick().whileTrue(new ClimberOverrideCommand(climberSubsystem, Constants.Climber.speed));
         buttonBoard.a().whileTrue(new ClimberOverrideCommand(climberSubsystem, -Constants.Climber.speed));
@@ -217,19 +213,19 @@ public class RobotContainer {
         secondDriver.povDown().onTrue(Commands.runOnce(elevatorSubsystem::setScoreLevelL2));
     }
 
-    public Command pickupCommand() {
-        return new SequentialCommandGroup(
-            new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
-            new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
-        );
-    }
+    // public Command pickupCommand() {
+    //     return new SequentialCommandGroup(
+    //         new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out),
+    //         new IntakeCommandFront(intakeSubsystemFront, Constants.Intake.suckSpeed)
+    //     );
+    // }
 
-    public Command scoreTroughCommand() {
-        return new SequentialCommandGroup(
-                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
-                new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.shootSpeed)
-        );
-    }
+    // public Command scoreTroughCommand() {
+    //     return new SequentialCommandGroup(
+    //             new PivotCommandAutomatic(pivotSubsystem, PivotPosition.score),
+    //             new IntakeCommandFront(intakeSubsystemFront, -Constants.Intake.shootSpeed)
+    //     );
+    // }
 
     public Command scoreCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
@@ -244,12 +240,12 @@ public class RobotContainer {
 
     public Command dealgaeCommand(ElevatorPosition level) {
         return new SequentialCommandGroup(
+                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.algae),
                 new ParallelCommandGroup(
                     new ElevatorCommandAutomatic(elevatorSubsystem, level),
-                    new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out)
-                ),
-                new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.algae),
-                new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
+                    new WheelCommand(chuteSubsystem, Constants.Chute.shootSpeed)
+                    //new PivotCommandAutomatic(pivotSubsystem, PivotPosition.out)
+                )
         );
     }
 
@@ -257,8 +253,8 @@ public class RobotContainer {
         return new SequentialCommandGroup(
             new ExtenderCommandAutomatic(extenderSubsystem, ExtenderPosition.in),
             new ParallelCommandGroup(
-                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down),
-                new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in)
+                new ElevatorCommandAutomatic(elevatorSubsystem, ElevatorPosition.down)
+                // new PivotCommandAutomatic(pivotSubsystem, PivotPosition.in)
             )
         );
     }
