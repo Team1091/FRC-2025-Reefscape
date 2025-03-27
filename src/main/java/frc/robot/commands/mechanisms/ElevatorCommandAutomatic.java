@@ -27,7 +27,7 @@ public class ElevatorCommandAutomatic extends Command {
             case algae1 -> Constants.Elevator.algae1Position;
             case algae2 -> Constants.Elevator.algae2Position;
             case selected -> elevatorSubsystem.getSelectedLevel();
-            default -> 0;
+            default -> 3;
         };
 
         if (elevatorSubsystem.getEncoderPosition() > endPosition) {
@@ -58,13 +58,14 @@ public class ElevatorCommandAutomatic extends Command {
         if (elevatorSubsystem.getLimitSwitchBottom() && motorDirection == -1) {
             return true;
         }
-        if (endPosition == 0) {
-            return elevatorSubsystem.getLimitSwitchBottom();
-        } else {
-            if (elevatorSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
-                return true;
-            }
-            return elevatorSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
+        if (elevatorSubsystem.getEncoderPosition() <= endPosition && motorDirection == -1) {
+            return true;
         }
+        return elevatorSubsystem.getEncoderPosition() >= endPosition && motorDirection == 1;
+    
+        // if (endPosition == 0) {
+        //     return elevatorSubsystem.getLimitSwitchBottom();
+        // } else {
+        //     }
     }
 }

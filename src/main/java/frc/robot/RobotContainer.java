@@ -112,7 +112,6 @@ public class RobotContainer {
     public void robotInit() {
         // Set the defaults when powered on
         poseEstimationSubsystem.setCurrentPose(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
-        drive.straightenWheels();
         drive.resetGyro();
         drive.setFieldState(true);
 
@@ -121,6 +120,7 @@ public class RobotContainer {
 
     public void robotEnabled() {
         climberSubsystem.resetEncoder();
+        drive.straightenWheels();
     }
 
     private void configureAutonomous() {

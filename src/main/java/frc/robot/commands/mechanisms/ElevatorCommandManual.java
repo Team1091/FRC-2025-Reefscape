@@ -17,7 +17,7 @@ public class ElevatorCommandManual extends Command {
 
     @Override
     public void execute() {
-        if (speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getLimitSwitchBottom()){
+        if (speed > 0 && elevatorSubsystem.getLimitSwitchTop() || speed < 0 && elevatorSubsystem.getEncoderPosition() < 3){
             elevatorSubsystem.setMotorSpeed(0);
         } else if (speed > 0 && elevatorSubsystem.getEncoderPosition() > Constants.Elevator.l4Position){
             elevatorSubsystem.setMotorSpeed(.4);
