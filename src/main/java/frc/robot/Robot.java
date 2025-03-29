@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit(){
         m_robotContainer.robotInit();
-        CameraServer.startAutomaticCapture().setExposureManual(40);
+        CameraServer.startAutomaticCapture().setExposureManual(70);
     }
 
     /**

@@ -24,7 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        climberEncoder.setPosition(50);
+        climberEncoder.setPosition(77);
     }
 
     public double getEncoderPosition() {

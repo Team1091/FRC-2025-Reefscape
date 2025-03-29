@@ -250,13 +250,13 @@ public class Drive extends SubsystemBase {
     }
 
     public boolean canMove() {
-        if (defenseMode && getPose().getTranslation().getDistance(middle) < 2){
+        if (defenseMode){
             return false;
         }
         return true;
     }
 
-    public Rotation2d getHeadingToMiddle(){
-        return getPose().getTranslation().minus(middle).getAngle();
-    }
+    // public Rotation2d getHeadingToMiddle(){
+    //     return getPose().getTranslation().minus(middle).getAngle();
+    // }
 }
