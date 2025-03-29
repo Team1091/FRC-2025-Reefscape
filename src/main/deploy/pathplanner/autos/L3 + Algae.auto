@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "G to Algae"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Dealgae Down"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "G to Algae"
                 }
               }
             ]

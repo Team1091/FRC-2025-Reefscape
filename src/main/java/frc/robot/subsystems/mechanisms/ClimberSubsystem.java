@@ -13,7 +13,7 @@ public class ClimberSubsystem extends SubsystemBase {
     private final RelativeEncoder climberEncoder;
 
     private double speed;
-
+//fix
     public ClimberSubsystem() {
         climberMotor = new SparkMax(Constants.Climber.motorChannel, MotorType.kBrushless);
         climberEncoder = climberMotor.getEncoder();
@@ -24,7 +24,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        climberEncoder.setPosition(50);
+        climberEncoder.setPosition(77);
     }
 
     public double getEncoderPosition() {
