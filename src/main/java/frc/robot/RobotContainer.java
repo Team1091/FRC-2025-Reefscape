@@ -12,9 +12,9 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.FollowPathCommand;
+// import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.NamedCommands;
+// import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -115,7 +115,7 @@ public class RobotContainer {
         drive.resetGyro();
         drive.setFieldState(true);
 
-        FollowPathCommand.warmupCommand().schedule();
+        // FollowPathCommand.warmupCommand().schedule();
     }
 
     public void robotEnabled() {
@@ -125,16 +125,17 @@ public class RobotContainer {
 
     private void configureAutonomous() {
         //NamedCommands.registerCommand("Score Trough", scoreTroughCommand());
-        NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
-        NamedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
-        NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
-        NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(chuteSubsystem, true));
-        NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 1000));
-        NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 1000));
-        NamedCommands.registerCommand("Return Dealgae", returnDealgaeCommand());
+        // NamedCommands.registerCommand("Score L2", scoreCommand(ElevatorPosition.l2));
 
-        autoChooser = AutoBuilder.buildAutoChooser();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        // amedCommands.registerCommand("Score L3", scoreCommand(ElevatorPosition.l3));
+        // NamedCommands.registerCommand("Score L4", scoreCommand(ElevatorPosition.l4));
+        // NamedCommands.registerCommand("Wait for Coral", new LimitSwitchWaitCommand(chuteSubsystem, true));
+        // NamedCommands.registerCommand("Dealgae Up", dealageWaitCommand(ElevatorPosition.algae2, 1000));
+        // NamedCommands.registerCommand("Dealgae Down", dealageWaitCommand(ElevatorPosition.algae1, 1000));
+        // NamedCommands.registerCommand("Return Dealgae", returnDealgaeCommand());
+
+        // autoChooser = AutoBuilder.buildAutoChooser();
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
